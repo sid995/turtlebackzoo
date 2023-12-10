@@ -1,0 +1,60 @@
+<!-- zoo/templates/zoo/home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    .btn-group button {
+        background-color: #780ec4; /* Green background */
+        border: 1px solid rgb(128, 0, 100); /* Green border */
+        color: white; /* White text */
+        padding: 10px 24px; /* Some padding */
+        cursor: pointer; /* Pointer/hand icon */
+        width: 50%; /* Set a width if needed */
+        display: block; /* Make the buttons appear below each other */
+    }
+
+    .btn-group button:not(:last-child) {
+        border-bottom: none; /* Prevent double borders */
+    }
+
+    /* Add a background color on hover */
+    .btn-group button:hover {
+        background-color: #ae3698;
+        transition: background-color 1s;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to Turtleback Zoo</title>
+</head>
+<body>
+{#{% extends 'base.html' %}#}
+{% block content %}
+    <div class="container">
+        <ul>
+            {% for row in data %}
+                <li>{{ row.FirstName }}</li>
+            {% empty %}
+                no objects found!
+            {% endfor %}
+        </ul>
+        <h1>Hello world</h1>
+    </div>
+{% endblock %}
+
+<h1>Welcome to Turtleback Zoo</h1>
+<div class="btn-group">
+    <a href="{% url 'asset_management' %}">
+        <button>Asset Management</button>
+    </a>
+    <a href="{% url 'daily_zoo_activity' %}">
+        <button>Daily Zoo Activity</button>
+    </a>
+    <a href="{% url 'management_reporting' %}">
+        <button>Management Reporting</button>
+    </a>
+    <a href="{% url 'login' %}">
+        <button> Employee login</button>
+    </a>
+</div>
+</body>
+</html>

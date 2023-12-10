@@ -1,0 +1,44 @@
+<!-- zoo/templates/zoo/dailyzoo.html -->
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    .btn-group button {
+        background-color: #780ec4; /* Green background */
+        border: 1px solid rgb(128, 0, 100); /* Green border */
+        color: white; /* White text */
+        padding: 10px 24px; /* Some padding */
+        cursor: pointer; /* Pointer/hand icon */
+        width: 50%; /* Set a width if needed */
+        display: block; /* Make the buttons appear below each other */
+    }
+
+    .btn-group button:not(:last-child) {
+        border-bottom: none; /* Prevent double borders */
+    }
+
+    /* Add a background color on hover */
+    .btn-group button:hover {
+        background-color: #ae3698;
+        transition: background-color 1s;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ page_title }}</title>
+</head>
+<body>
+<h1>{{ page_title }}</h1>
+<div class="btn-group">
+    <a href="{% url 'attractions_activity' %}">
+        <button>attractions activity</button>
+    </a>
+    <a href="{% url 'concessions_page' %}">
+        <button>concessions page</button>
+    </a>
+    <a href="{% url 'attendance_page' %}">
+        <button>attendance page</button>
+    </a>
+</div>
+</body>
+</html>
+

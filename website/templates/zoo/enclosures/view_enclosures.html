@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Enclosure Management</h2>
+
+    <a href="{% url 'create_enclosure' %}">Create New Enclosure</a>
+    <!-- Display a paginated list of enclosures with links to view, update, and delete -->
+    <table border="1">
+        <tr>
+            <th>Enclosure ID</th>
+            <th>SqFt</th>
+            <th>Building</th>
+            <th>Actions</th>
+        </tr>
+        {% for en in enclosures %}
+            <tr>
+                <td>{{ en.ID }}</td>
+                <td>{{ en.SqFt }}</td>
+                <td>{{ en.BuildingName }}</td>
+                <td>
+                    <a href={% url "view_enclosure" enId=en.ID %}>View</a>
+                    | <a href={% url "update_enclosure" enId=en.ID %}>Update</a>
+                    | <a href={% url "delete_enclosure" enId=en.ID %}>Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+
+
+    </table>
+{% endblock %}

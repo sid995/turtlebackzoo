@@ -26,8 +26,7 @@
                     <td>{% firstof animal.EnclosureID "N/A" %}</td>
                     <td>{% firstof animal.BuildingName "N/A" %}</td>
                     <td>
-                        <a href={% url "view_animal" animalID=animal.ID %}>View</a>
-                        | <a href={% url "update_animal" animalID=animal.ID %}>Update</a>
+                        <a href={% url "update_animal" animalID=animal.ID %}>Update</a>
                         | <a href={% url "delete_animal" animalID=animal.ID %}>Delete</a>
                     </td>
                 </tr>

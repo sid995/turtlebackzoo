@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Create Enclosure</h2>
+    <form method="post" action="{% url 'create_enclosure' %}">
+        {% csrf_token %}
+        <label for="buildingId">Building:
+            <select name="buildingId" required>
+                {% for b in buildings %}
+                    <option value="{{ b.ID }}">
+                        {{ b.Name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </label>
+        <br>
+
+        <label for="sqFt">Square Footage:
+            <input type="number" name="sqFt" required>
+        </label>
+        <br>
+
+        <button type="submit" name="createEnclosure">Create Enclosure</button>
+    </form>
+
+    <a href="/enclosures/view_enclosures">Back to Enclosures</a>
+{% endblock %}

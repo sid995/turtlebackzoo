@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Update Enclosure</h2>
+    <form method="post" action="{% url 'update_enclosure' enclosure.BuildingID %}">
+        {% csrf_token %}
+        <label for="buildingId">Building:
+            <select name="buildingId" required>
+                {% for b in buildings %}
+                    <option value="{{ b.ID }}" {% if b.ID == enclosure.BuildingID %} selected {% endif %}>
+                        {{ b.Name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </label>
+        <br>
+
+        <label for="sqFt">Square Footage:
+            <input type="number" name="sqFt" value="{{ enclosure.SqFt }}" required>
+        </label>
+        <br>
+        <button type="submit" name="updateEnclosure">Update Enclosure</button>
+    </form>
+
+    <a href={% url 'view_enclosures' %}>Back to Enclosures</a>
+{% endblock %}

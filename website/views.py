@@ -117,10 +117,6 @@ FROM animal
     return render(request, 'zoo/animal/view_animals.html', {"animals": r})
 
 
-def view_animal(request, animalID):
-    return render(request, 'zoo/animal/view_animal.html', {"animals": 'r'})
-
-
 def create_animal(request):
     if request.method == 'POST':
         status = request.POST['status']
@@ -476,6 +472,77 @@ def delete_employees(request, empId):
     return redirect('/employees/view_employees')
 
 
+def view_enclosures(request):
+    enclosure_query = "SELECT e.ID, e.SqFt, b.Name AS BuildingName FROM enclosure e JOIN building b ON e.BuildingID = b.ID"
+    cursor = connection.cursor()
+    cursor.execute(enclosure_query)
+    r = dict_fetch_all(cursor)
+    # redirect
+    return render(request,
+                  'zoo/enclosures/view_enclosures.html',
+                  {'enclosures': r}
+                  )
+
+
+def view_enclosure(request, enId):
+    enclosure_query = "SELECT e.ID, e.SqFt, b.Name AS BuildingName FROM enclosure e JOIN building b ON e.BuildingID = b.ID WHERE e.ID = '{}'".format(
+        enId)
+    cursor = connection.cursor()
+    cursor.execute(enclosure_query)
+    r = dict_fetch_all(cursor)
+    return render(request, 'zoo/enclosures/view_enclosure.html', {"enclosure": r[0]})
+
+
+def update_enclosure(request, enId):
+    if request.method == "POST":
+        buildingId = request.POST.get('buildingId')
+        sqft = request.POST.get('sqFt')
+        update_enclosure_query = "UPDATE enclosure SET BuildingID = '{}', SqFt = '{}' WHERE ID = '{}'".format(
+            buildingId, sqft, enId)
+        cursor = connection.cursor()
+        cursor.execute(update_enclosure_query)
+        connections['default'].commit()
+        return redirect('/enclosures/view_enclosures')
+
+    enclosure_query = "SELECT BuildingID, SqFt FROM enclosure WHERE ID = '{}'".format(enId)
+    cursor = connection.cursor()
+    cursor.execute(enclosure_query)
+    r = dict_fetch_all(cursor)
+
+    get_buildings = "SELECT ID, Name FROM building"
+    cursor = connection.cursor()
+    cursor.execute(get_buildings)
+    b = dict_fetch_all(cursor)
+    print(r, b)
+    return render(request, 'zoo/enclosures/update_enclosure.html', {"enclosure": r[0], "buildings": b})
+
+
+def delete_enclosure(request, enId):
+    delete_query = "DELETE FROM enclosure WHERE ID = '{}'".format(enId)
+    cursor = connection.cursor()
+    cursor.execute(delete_query)
+    connections['default'].commit()
+    return redirect('/enclosures/view_enclosures')
+
+
+def create_enclosure(request):
+    if request.method == 'POST':
+        buildingId = request.POST.get('buildingId')
+        sqft = request.POST.get('sqFt')
+        create_enclosure_query = "INSERT INTO enclosure (BuildingID, SqFt) VALUES ('{}', '{}')".format(buildingId, sqft)
+        cursor = connection.cursor()
+        cursor.execute(create_enclosure_query)
+        connections['default'].commit()
+        return redirect('/enclosures/view_enclosures')
+
+    fetch_building = "SELECT ID, Name FROM building"
+    cursor = connection.cursor()
+    cursor.execute(fetch_building)
+    r = dict_fetch_all(cursor)
+    print(r)
+    return render(request, 'zoo/enclosures/create_enclosure.html', {"buildings": r})
+
+
 def asset_management(request):
     return render(request, 'zoo/asset_management.html', {'page_title': 'Asset Management'})
 
@@ -577,7 +644,7 @@ def register(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
-        confirmpassword = request.POST['confirmPassword']
+        confirm_password = request.POST['confirmPassword']
 
         query = "SELECT * FROM users WHERE Username = %s"
         cursor = connection.cursor()
@@ -587,7 +654,7 @@ def register(request):
         if len(r) > 0:
             return render(request, 'zoo/authentication/register.html',
                           {'page_title': 'Signup', 'error': 'Username already exists'})
-        elif password != confirmpassword:
+        elif password != confirm_password:
             return render(request, 'zoo/authentication/register.html',
                           {'page_title': 'Signup', 'error': 'Passwords do not match'})
         else:

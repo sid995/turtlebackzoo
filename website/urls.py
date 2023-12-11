@@ -18,7 +18,6 @@ urlpatterns = [
     path('users/delete_user/<str:username>', views.delete_user, name='delete_user'),
 
     path('animals/view_animals', views.view_animals, name='view_animals'),
-    path('animals/view_animal/<int:animalID>', views.view_animal, name='view_animal'),
     path('animals/create_animal', views.create_animal, name='create_animal'),
     path('animals/update_animal/<int:animalID>', views.update_animal, name='update_animal'),
     path('animals/delete_animal/<int:animalID>', views.delete_animal, name='delete_animal'),
@@ -33,6 +32,12 @@ urlpatterns = [
     path('employees/create_employees', views.create_employees, name='create_employees'),
     path('employees/update_employees/<int:empId>', views.update_employees, name='update_employees'),
     path('employees/delete_employees/<int:empId>', views.delete_employees, name='delete_employees'),
+
+    path('enclosures/view_enclosures', views.view_enclosures, name='view_enclosures'),
+    path('enclosures/view_enclosure/<int:enId>', views.view_enclosure, name='view_enclosure'),
+    path('enclosures/update_enclosure/<int:enId>', views.update_enclosure, name='update_enclosure'),
+    path('enclosures/delete_enclosure/<int:enId>', views.delete_enclosure, name='delete_enclosure'),
+    path('enclosures/create_enclosure', views.create_enclosure, name='create_enclosure'),
 
     path('daily_zoo_activity', views.daily_zoo_activity, name='daily_zoo_activity'),
     path('management_reporting', views.management_reporting, name='management_reporting'),

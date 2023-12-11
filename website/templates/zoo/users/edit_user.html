@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Edit User - {{ userdata.Username }}</h1>
+    <h2>Current Role - {{ userdata.Role }}</h2>
+    <form method="POST" action="{% url 'edit_user' userdata.Username %}">
+        {% csrf_token %}
+        <label for="role">Select New Role:</label>
+        <select name="role" id="role">
+            <option value="Admin" {% if userdata.Role == 'Admin' %} selected {% endif %}>Admin</option>
+            <option value="Manager" {% if userdata.Role == 'Manager' %} selected {% endif %}>Manager</option>
+            <option value="User" {% if userdata.Role == 'User' %} selected {% endif %}>User</option>
+        </select>
+        <button type="submit" name="updateUser">Update Role</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Create User</h1>
+    <form method="post" action="/users/create_user">
+        {% csrf_token %}
+        <label for="newUsername">New Username:
+            <input type="text" name="newUsername" required>
+        </label>
+        <br>
+
+        <label for="newPassword">New Password:
+            <input type="password" name="newPassword" required>
+        </label>
+        <br>
+
+        <label for="role">Select Role:
+            <select name="new_role">
+                <option value="Admin" selected>Admin</option>
+                <option value="User">User</option>
+                <option value="Manager">Manager</option>
+                <!-- Add more options if needed -->
+            </select>
+        </label>
+        <br>
+        {% for message in messages %}
+            <div style="color: red">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <button type="submit">Create User</button>
+    </form>
+{% endblock %}

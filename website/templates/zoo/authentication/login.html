@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+    <div>
+        <h1>Login</h1>
+        <form action="/login" method="POST">
+            {% csrf_token %}
+            <label for="username">Enter Username:
+                <input type="text" name="username" placeholder="Username" required><br>
+            </label>
+            <br>
+            <label for="password">Enter Password:
+                <input type="password" name="password" placeholder="Password" required><br>
+            </label>
+            {% if error %}
+                <div style="color:red">{{ error }}</div>
+            {% endif %}
+            <br>
+            <button type="submit">Login</button>
+        </form>
+        <div>
+            Want to register? <a href="/register">Click Here</a>
+        </div>
+    </div>
+{% endblock %}
+

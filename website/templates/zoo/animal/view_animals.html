@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}View Animals{% endblock %}
+{% block content %}
+    <h1>View Animals</h1>
+    <a href="/animals/create_animal">Create New Animal</a>
+    {% if animals|length > 0 %}
+        <table border="1">
+            <thead>
+            <tr>
+                <th>Animal ID</th>
+                <th>Status</th>
+                <th>Birth Year</th>
+                <th>Species Name</th>
+                <th>Enclosure ID</th>
+                <th>Building Name</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for animal in animals %}
+                <tr>
+                    <td>{% firstof animal.ID "N/A" %}</td>
+                    <td>{% firstof animal.Status "N/A" %}</td>
+                    <td>{% firstof animal.BirthYear "N/A" %}</td>
+                    <td>{% firstof animal.SpeciesName "N/A" %}</td>
+                    <td>{% firstof animal.EnclosureID "N/A" %}</td>
+                    <td>{% firstof animal.BuildingName "N/A" %}</td>
+                    <td>
+                        <a href={% url "view_animal" animalID=animal.ID %}>View</a>
+                        | <a href={% url "update_animal" animalID=animal.ID %}>Update</a>
+                        | <a href={% url "delete_animal" animalID=animal.ID %}>Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h2>No animals currently in zoo</h2>
+    {% endif %}
+{% endblock %}
+
+{#{% if athlete_list|length > 1 %}...{% endif %}#}

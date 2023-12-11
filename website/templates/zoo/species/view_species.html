@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}View Species{% endblock %}
+{% block content %}
+    <h1>View Species</h1>
+    {#    <a href="/animals/create_animal">Create New Animal</a>#}
+    {% if species|length > 0 %}
+        <table border="1">
+            <thead>
+            <tr>
+                <th>Species ID</th>
+                <th>Name</th>
+                <th>Food Cost</th>
+                <th>Update Date</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for sp in species %}
+                <tr>
+                    <td>{% firstof sp.ID "N/A" %}</td>
+                    <td>{% firstof sp.Name "N/A" %}</td>
+                    <td>{% firstof sp.FoodCost "N/A" %}</td>
+                    <td>{% firstof sp.updated_date "N/A" %}</td>
+                    <td>
+                        <a href={% url "view_one_species" speciesID=sp.ID %}>View</a>
+                        {# | <a href={% url "update_specie" specieID=sp.ID %}>Update</a> | Delete#}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h2>No species data in db</h2>
+    {% endif %}
+{% endblock %}
+
+{#{% if athlete_list|length > 1 %}...{% endif %}#}

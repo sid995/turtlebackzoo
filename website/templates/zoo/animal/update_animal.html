@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Update Animal{% endblock %}
+{% block content %}
+    <h2>Update Animal</h2>
+    <!-- Animal creation form -->
+    <form method="post" action="">
+        {% csrf_token %}
+        <label for="status">Status:
+            <input type="text" name="status" required value="{{ animal.Status }}">
+        </label>
+        <br>
+
+        <label for="birthYear">Birth Year:
+            <input type="text" name="birthYear" required value={{ animal.BirthYear|date:"Y-m-d" }}>
+        </label>
+        <br>
+
+        <label for="species">Species:
+            <select name="species">
+                {% for sp in species %}
+                    <option value={{ sp.ID }} {% if sp.ID  == animal.SpeciesID %} selected {% endif %}>{{ sp.Name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <br>
+
+        <label for="building">Building:
+            <select name="building">
+                {% for bd in building %}
+                    <option value={{ bd.ID }} {% if bd.ID  == animal.BuildingID %} selected {% endif %}>{{ bd.Name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <br>
+
+        <label for="enclosure">Enclosure:
+            <select name="enclosure">
+                {% for en in enclosure %}
+                    <option value={{ en.ID }} {% if en.ID  == animal.EnclosureID %} selected {% endif %}>{{ en.SqFt }}
+                        sqft
+                    </option>
+                {% endfor %}
+            </select>
+        </label>
+        <br>
+
+        <button type="submit" name="updateAnimal">Update Animal</button>
+    </form>
+
+    <a href="/animals/view_animals">Back to Animals</a>
+
+{% endblock %}

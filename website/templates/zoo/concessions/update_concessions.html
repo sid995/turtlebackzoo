@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Update Concession</h2>
+    <form method="post" action="{% url "update_concessions" conId=concessions.ID %}">
+        {% csrf_token %}
+        <label for="updatedProduct">Updated Product:
+            <input type="text" name="updatedProduct" value="{{ concessions.Product }}" required>
+        </label>
+        <br>
+
+        <button type="submit">Update Concession</button>
+    </form>
+
+    <a href="/concessions/view_concessions">Back to Concessions</a>
+
+{% endblock %}

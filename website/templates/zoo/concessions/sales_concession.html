@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h2>Daily Concession Revenue</h2>
+    <form method="post" action="{% url 'sales_concessions' %}">
+        {% csrf_token %}
+        <label for="concessionID">Select Concession:
+            <select name="concessionID" required>
+                {% for con in concessions %}
+                    <option value="{{ con.ID }}">
+                        {{ con.Product }}
+                    </option>
+                {% endfor %}
+            </select>
+        </label>
+        <br>
+
+        <label for="revenue">Revenue:
+            <input type="number" name="revenue" min="0" step="0.01" required>
+        </label>
+        <br>
+
+        <button type="submit">Record Daily Revenue</button>
+    </form>
+    <br><br><br>
+
+    <!-- Display daily concession revenue -->
+    <h3>Daily Concession Revenue Information</h3>
+    <table border="1">
+        <tr>
+            <th>Record ID</th>
+            <th>Concession Name</th>
+            <th>Revenue</th>
+            <th>Sale Date</th>
+        </tr>
+        {% for dcon in daily_concession %}
+            <tr>
+                <td>{{ dcon.RecordID }}</td>
+                <td>{{ dcon.Product }}</td>
+                <td>{{ dcon.Revenue }}</td>
+                <td>{{ dcon.SaleDate }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

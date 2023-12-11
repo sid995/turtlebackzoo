@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Update Employee - {{ employee.FullName }}</h2>
+    <form method="post" action={% url "update_employees" employee.EmployeeID %}>
+        {% csrf_token %}
+        <label for="newStartDate">New Start Date:
+            <input type="text" name="newStartDate" required value="{{ employee.StartDate }}">
+        </label>
+        <br>
+
+        <label for="newJobType">New Job Type:
+             <select name="newJobType" required>
+                <option value="Veterinarian" {% if employee.JobType == "Veterinarian" %}Selected{% endif %}>Veterinarian</option>
+                <option value="Animal Care Specialist" {% if employee.JobType == "Animal Care Specialist" %}Selected{% endif %}>Animal Care Specialist</option>
+                <option value="Maintenance" {% if employee.JobType == "Maintenance" %}Selected{% endif %}>Maintenance</option>
+                <option value="Customer Service" {% if employee.JobType == "Customer Service" %}Selected{% endif %}>Customer Service</option>
+                <option value="Ticket Seller" {% if employee.JobType == "Ticket Seller" %}Selected{% endif %}>Ticket Seller</option>
+            </select>
+        </label>
+        <br>
+
+        <label for="newFirstName">New First Name:
+            <input type="text" name="newFirstName" required value="{{ employee.FirstName }}">
+        </label>
+        <br>
+
+        <label for="newMiddleName">New Middle Name:
+            <input type="text" name="newMiddleName" value="{{ employee.MiddleName }}">
+        </label>
+        <br>
+
+        <label for="newLastName">New Last Name:
+            <input type="text" name="newLastName" required value="{{ employee.LastName }}">
+        </label>
+        <br>
+
+        <button type="submit">Update Employee</button>
+    </form>
+
+    <a href="/employees/view_employees">Back to Employees</a>
+{% endblock %}

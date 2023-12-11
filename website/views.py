@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib import messages
 from django.db import connection, connections, IntegrityError
 from django.shortcuts import redirect
@@ -34,11 +36,11 @@ def create_user(request):
         r = dict_fetch_all(cursor)
 
         if len(r) == 0:
-            userinsertquery = "INSERT INTO users (Username, Password, Role) VALUES (%s, %s, %s)"
+            user_insert_query = "INSERT INTO users (Username, Password, Role) VALUES (%s, %s, %s)"
             try:
                 with connections['default'].cursor() as cursor:
                     # execute query taking in username, password, role
-                    cursor.execute(userinsertquery, [new_username, new_password, new_role])
+                    cursor.execute(user_insert_query, [new_username, new_password, new_role])
             except IntegrityError as e:
                 # Handle integrity constraint violations or other database errors
                 print(f"Error executing raw SQL query: {e}")
@@ -56,9 +58,9 @@ def create_user(request):
 
 def edit_user(request, username):
     if request.method == 'GET':
-        getuserquery = "SELECT * FROM users WHERE Username='{}'".format(username)
+        get_user_query = "SELECT * FROM users WHERE Username='{}'".format(username)
         cursor = connection.cursor()
-        cursor.execute(getuserquery)
+        cursor.execute(get_user_query)
         r = dict_fetch_all(cursor)
         if len(r) == 0:
             messages.error(request, 'User not found')
@@ -68,12 +70,11 @@ def edit_user(request, username):
 
     if request.method == 'POST':
         selected_user_role = request.POST.get('role')
-        print(selected_user_role, username)
-        edituserquery = "UPDATE users SET Role='{}' WHERE Username='{}'".format(selected_user_role, username)
+        edit_user_query = "UPDATE users SET Role='{}' WHERE Username='{}'".format(selected_user_role, username)
         try:
             with connections['default'].cursor() as cursor:
                 # execute query taking in username, password, role (default "User")
-                cursor.execute(edituserquery)
+                cursor.execute(edit_user_query)
         except IntegrityError as e:
             # Handle integrity constraint violations or other database errors
             print(f"Error executing raw SQL query: {e}")
@@ -86,11 +87,11 @@ def edit_user(request, username):
 
 
 def delete_user(request, username):
-    deleteuserquery = "DELETE FROM users WHERE Username='{}'".format(username)
+    delete_user_query = "DELETE FROM users WHERE Username='{}'".format(username)
     try:
         with connections['default'].cursor() as cursor:
             # execute query taking in username, password, role (default "User")
-            cursor.execute(deleteuserquery)
+            cursor.execute(delete_user_query)
     except IntegrityError as e:
         # Handle integrity constraint violations or other database errors
         print(f"Error executing raw SQL query: {e}")
@@ -103,7 +104,7 @@ def delete_user(request, username):
 
 
 def view_animals(request):
-    viewanimalquery = """
+    view_animal_query = """
         SELECT animal.ID, animal.Status, animal.BirthYear, species.Name AS SpeciesName, enclosure.ID AS EnclosureID, building.Name AS BuildingName
 FROM animal
         LEFT JOIN species ON animal.SpeciesID = species.ID
@@ -111,7 +112,7 @@ FROM animal
         LEFT JOIN building ON animal.BuildingID = building.ID;
     """
     cursor = connection.cursor()
-    cursor.execute(viewanimalquery)
+    cursor.execute(view_animal_query)
     r = dict_fetch_all(cursor)
     return render(request, 'zoo/animal/view_animals.html', {"animals": r})
 
@@ -156,7 +157,6 @@ def create_animal(request):
             building_fetch = dict_fetch_all(cursor)
             cursor.execute(enclosure_query)
             enclosure_fetch = dict_fetch_all(cursor)
-            print(species_fetch, building_fetch, enclosure_fetch)
     except IntegrityError as e:
         # Handle integrity constraint violations or other database errors
         print(f"Error executing raw SQL query: {e}")
@@ -177,7 +177,6 @@ def update_animal(request, animalID):
         newBuilding = request.POST.get('building')
         newEnclosure = request.POST.get('enclosure')
         newBirthYear = request.POST.get('birthYear')
-        print(type(int(newBuilding)), type(newBuilding))
         animalUpdateQuery = "UPDATE animal SET Status = '{}', BirthYear='{}', SpeciesID = '{}', BuildingID = '{}', EnclosureID = '{}' WHERE ID = '{}'".format(
             newStatus, newBirthYear, int(newSpecies), int(newBuilding), int(newEnclosure), animalID)
 
@@ -219,7 +218,6 @@ def update_animal(request, animalID):
 
             cursor.execute(animal_id_query)
             animal_fetch = dict_fetch_all(cursor)
-            print(animal_fetch)
             if len(animal_fetch) != 1:
                 return redirect("/animals/view_animals")
 
@@ -238,11 +236,11 @@ def update_animal(request, animalID):
 
 
 def delete_animal(request, animalID):
-    deleteanimalquery = "DELETE FROM animal WHERE ID = '{}'".format(animalID)
+    delete_animal_query = "DELETE FROM animal WHERE ID = '{}'".format(animalID)
     try:
         with connections['default'].cursor() as cursor:
             # execute query taking in username, password, role (default "User")
-            cursor.execute(deleteanimalquery)
+            cursor.execute(delete_animal_query)
     except IntegrityError as e:
         # Handle integrity constraint violations or other database errors
         print(f"Error executing raw SQL query: {e}")
@@ -265,7 +263,6 @@ def view_one_species(request, speciesID):
     cursor = connection.cursor()
     cursor.execute("SELECT ID, Name, FoodCost, updated_date FROM species WHERE ID = '{}'".format(speciesID))
     result = dict_fetch_all(cursor)
-    print(result)
     if len(result) > 0:
         result = result[0]
         return render(request, 'zoo/species/view_one_species.html', {'species': result})
@@ -298,7 +295,8 @@ def update_species(request, species_id):
     if request.method == 'POST':
         name = request.POST['name']
         foodCost = request.POST['foodCost']
-        update_species_query = "UPDATE species SET Name = '{}', FoodCost = '{}', updated_date = CURRENT_DATE WHERE ID = '{}'".format(name, foodCost, species_id)
+        update_species_query = "UPDATE species SET Name = '{}', FoodCost = '{}', updated_date = CURRENT_DATE WHERE ID = '{}'".format(
+            name, foodCost, species_id)
         cursor = connection.cursor()
         try:
             cursor.execute(update_species_query)
@@ -345,6 +343,137 @@ def delete_species(request, speciesID):
         connections['default'].commit()
         # redirect
         return redirect('/species/view_species')
+
+
+def view_employees(request):
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM employee")
+    result = dict_fetch_all(cursor)
+    return render(request, 'zoo/employees/view_employees.html', {'employees': result})
+
+
+def create_employees(request):
+    if request.method == 'POST':
+        job_type = request.POST.get('jobType')
+        first_name = request.POST.get('firstName')
+        middle_name = request.POST.get('middleName')
+        last_name = request.POST.get('lastName')
+        street = request.POST.get('street')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        ezip = request.POST.get('zip')
+        super_id = request.POST.get('superID')
+        hour_rate_id = request.POST.get('hourlyRateID')
+        concession_id = request.POST.get('concessionID')
+        zoo_admission_id = request.POST.get('zooAdmissionID')
+        print(ezip, super_id, hour_rate_id, concession_id, zoo_admission_id)
+        print(type(ezip), type(super_id), type(hour_rate_id), type(concession_id), type(zoo_admission_id))
+
+        username = (first_name + ' ' + last_name).lower()
+        # this is a temporary method.
+        # can be enhanced later by adding some crypt or
+        # implementing sha_256
+        password = username
+        startDate = date.today()
+
+        create_employee_query = "INSERT INTO employee (StartDate, JobType, FirstName, MiddleName, LastName, Street, City, State, Zip, SuperID, HourlyRateID, ConcessionID, ZooAdmissionID) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
+            startDate, job_type, first_name, middle_name, last_name, street, city, state, ezip, int(float(super_id)),
+            int(hour_rate_id), int(concession_id), int(zoo_admission_id))
+
+        create_new_user_query = "INSERT INTO users (Username, Password, Role) VALUES ('{}', '{}', '{}')".format(
+            username, password, job_type)
+
+        try:
+            with connections['default'].cursor() as cursor:
+                cursor.execute(create_employee_query)
+                cursor.execute(create_new_user_query)
+        except IntegrityError as e:
+            # Handle integrity constraint violations or other database errors
+            print(f"Error executing raw SQL query: {e}")
+            return False
+        else:
+            # Commit the changes if the query executed successfully
+            print("Success")
+            connections['default'].commit()
+            # redirect
+            return redirect('/employees/view_employees')
+
+    employee_query = "SELECT EmployeeID, CONCAT(FirstName, ' ', LastName) AS FullName FROM employee"
+    hour_rate_query = "SELECT ID, HourlyRate FROM hourlyrate"
+    concession_query = "SELECT ID, Product FROM concession"
+    zoo_admission_query = "SELECT ID FROM zooadmission"
+
+    try:
+        with connections['default'].cursor() as cursor:
+            # execute query taking in username, password, role (default "User")
+            cursor.execute(employee_query)
+            employees_fetch = dict_fetch_all(cursor)
+            cursor.execute(hour_rate_query)
+            hour_rate_fetch = dict_fetch_all(cursor)
+            cursor.execute(concession_query)
+            concession_fetch = dict_fetch_all(cursor)
+            cursor.execute(zoo_admission_query)
+            zoo_admission_fetch = dict_fetch_all(cursor)
+
+            if len(employees_fetch) == 0:
+                return redirect("/employees/view_employees")
+
+    except IntegrityError as e:
+        # Handle integrity constraint violations or other database errors
+        print(f"Error executing raw SQL query: {e}")
+        return False
+    else:
+        connections['default'].commit()
+        return render(request,
+                      'zoo/employees/create_employees.html',
+                      {
+                          'employees': employees_fetch,
+                          'hour_rate': hour_rate_fetch,
+                          'concession': concession_fetch,
+                          'zoo_admission': zoo_admission_fetch
+                      })
+
+
+def update_employees(request, empId):
+    if request.method == 'GET':
+        employee_query = "SELECT EmployeeID, FirstName, MiddleName, LastName, StartDate, JobType, CONCAT(FirstName, ' ', LastName) AS FullName FROM employee WHERE EmployeeID='{}'".format(
+            empId)
+        cursor = connection.cursor()
+        cursor.execute(employee_query)
+        r = dict_fetch_all(cursor)
+
+        if len(r) == 0:
+            return redirect("/employees/view_employees")
+        print(r)
+        return render(request,
+                      'zoo/employees/update_employees.html',
+                      {'employee': r[0]}
+                      )
+
+    if request.method == "POST":
+        job_type = request.POST.get('newJobType')
+        start_date = request.POST.get('newStartDate')
+        first_name = request.POST.get('newFirstName')
+        middle_name = request.POST.get('newMiddleName')
+        last_name = request.POST.get('newLastName')
+
+        if request.session['role'] == "Admin":
+            update_sql = "UPDATE employee SET StartDate = '{}', JobType = '{}', FirstName = '{}', MiddleName = '{}', LastName = '{}' WHERE EmployeeID = '{}'".format(
+                start_date, job_type, first_name, middle_name, last_name, empId)
+            cursor = connection.cursor()
+            cursor.execute(update_sql)
+            connections['default'].commit()
+            # redirect
+            return redirect('/employees/view_employees')
+
+
+def delete_employees(request, empId):
+    delete_query = "DELETE FROM employee WHERE EmployeeID = '{}'".format(empId)
+    cursor = connection.cursor()
+    cursor.execute(delete_query)
+    connections['default'].commit()
+    # redirect
+    return redirect('/employees/view_employees')
 
 
 def asset_management(request):

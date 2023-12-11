@@ -2,7 +2,7 @@
 {% block title %}View Species{% endblock %}
 {% block content %}
     <h1>View Species</h1>
-    {#    <a href="/animals/create_animal">Create New Animal</a>#}
+    <a href="/species/create_species">Create New Specie</a>
     {% if species|length > 0 %}
         <table border="1">
             <thead>
@@ -23,7 +23,8 @@
                     <td>{% firstof sp.updated_date "N/A" %}</td>
                     <td>
                         <a href={% url "view_one_species" speciesID=sp.ID %}>View</a>
-                        {# | <a href={% url "update_specie" specieID=sp.ID %}>Update</a> | Delete#}
+                        | <a href={% url "update_species" species_id=sp.ID %}>Update</a>
+                        | <a href={% url "delete_species" speciesID=sp.ID %}>Delete</a>
                     </td>
                 </tr>
             {% endfor %}

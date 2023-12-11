@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Create Species{% endblock %}
+{% block content %}
+    <h1>View Species</h1>
+    <form method="post" action="/species/create_species">
+        {% csrf_token %}
+        <label for="name">Name:
+            <input type="text" name="name" required>
+        </label>
+        <br>
+
+        <label for="foodCost">Food Cost:
+            <input type="number" name="foodCost" required>
+        </label>
+        <br>
+
+        <button type="submit" name="createSpecies">Create Species</button>
+    </form>
+
+    <a href="/species/view_species">Back to Species</a>
+{% endblock %}

@@ -1,7 +1,27 @@
 {% extends 'base.html' %}
-{% block title %}View One Specie{% endblock %}
+{% block title %}View Single Species{% endblock %}
 {% block content %}
     <h1>View One Specie</h1>
-    {#    <a href="/animals/create_animal">Create New Animal</a>#}
-
+    {% if not species %}
+        <h2>No data associated with this species</h2>
+    {% else %}
+        <table border="1">
+            <thead>
+            <tr>
+                <th>Species ID</th>
+                <th>Name</th>
+                <th>Food Cost</th>
+                <th>Update Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{% firstof species.ID "N/A" %}</td>
+                <td>{% firstof species.Name "N/A" %}</td>
+                <td>{% firstof species.FoodCost "N/A" %}</td>
+                <td>{% firstof species.updated_date "N/A" %}</td>
+            </tr>
+            </tbody>
+        </table>
+    {% endif %}
 {% endblock %}

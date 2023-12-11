@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
+    <h2>Update Species - {{ species.Name }}</h2>
+    <form method="post" action="{% url 'update_species' species.ID %}">
+    {% csrf_token %}
+        <label for="name">Name:
+            <input type="text" name="name" value="{{ species.Name }}" required>
+        </label>
+        <br>
 
-</body>
-</html>
+        <label for="foodCost">Food Cost:
+            <input type="number" name="foodCost" value="{{ species.FoodCost }}" required>
+        </label>
+        <br>
+
+        <button type="submit" name="updateSpecies">Update Species</button>
+    </form>
+
+    <a href="{% url "view_species" %}">Back to Species</a>
+{% endblock %}

@@ -3,7 +3,7 @@
 {% block content %}
     <h2>Update Animal</h2>
     <!-- Animal creation form -->
-    <form method="post" action="">
+    <form method="post" action="{% url 'update_animal' animal.ID %}">
         {% csrf_token %}
         <label for="status">Status:
             <input type="text" name="status" required value="{{ animal.Status }}">

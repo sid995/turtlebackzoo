@@ -139,7 +139,7 @@ def create_animal(request):
             return False
         else:
             # Commit the changes if the query executed successfully
-            # connections['default'].commit()
+            connections['default'].commit()
             # redirect
             return redirect('/animals/view_animals')
 
@@ -176,10 +176,10 @@ def update_animal(request, animalID):
         newSpecies = request.POST.get('species')
         newBuilding = request.POST.get('building')
         newEnclosure = request.POST.get('enclosure')
-        newBirthyear = request.POST.get('birthYear')
+        newBirthYear = request.POST.get('birthYear')
         print(type(int(newBuilding)), type(newBuilding))
         animalUpdateQuery = "UPDATE animal SET Status = '{}', BirthYear='{}', SpeciesID = '{}', BuildingID = '{}', EnclosureID = '{}' WHERE ID = '{}'".format(
-            newStatus, newBirthyear, int(newSpecies), int(newBuilding), int(newEnclosure), animalID)
+            newStatus, newBirthYear, int(newSpecies), int(newBuilding), int(newEnclosure), animalID)
 
         try:
             with connections['default'].cursor() as cursor:
@@ -191,7 +191,7 @@ def update_animal(request, animalID):
             print(f"Error executing raw SQL query: {e}")
             return False
         else:
-            # connections['default'].commit()
+            connections['default'].commit()
             return redirect("/animals/view_animals")
 
     species_query = "SELECT * FROM species"
@@ -258,21 +258,93 @@ def view_species(request):
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM species")
     result = dict_fetch_all(cursor)
-    return render(request,
-                  'zoo/species/view_species.html',
-                  {'species': result}
-                  )
+    return render(request, 'zoo/species/view_species.html', {'species': result})
 
 
 def view_one_species(request, speciesID):
     cursor = connection.cursor()
     cursor.execute("SELECT ID, Name, FoodCost, updated_date FROM species WHERE ID = '{}'".format(speciesID))
     result = dict_fetch_all(cursor)
+    print(result)
     if len(result) > 0:
         result = result[0]
         return render(request, 'zoo/species/view_one_species.html', {'species': result})
     else:
-        return redirect('species/view_species')
+        return redirect('/species/view_species')
+
+
+def create_species(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        foodCost = request.POST['foodCost']
+        create_species_query = "INSERT INTO species (Name, FoodCost, updated_date) VALUES ('{}', '{}', CURRENT_DATE)".format(
+            name, foodCost)
+        try:
+            with connections['default'].cursor() as cursor:
+                cursor.execute(create_species_query)
+        except IntegrityError as e:
+            # Handle integrity constraint violations or other database errors
+            print(f"Error executing raw SQL query: {e}")
+            return False
+        else:
+            # Commit the changes if the query executed successfully
+            connections['default'].commit()
+            # redirect
+            return redirect('/species/view_species')
+    return render(request, 'zoo/species/create_species.html')
+
+
+def update_species(request, species_id):
+    if request.method == 'POST':
+        name = request.POST['name']
+        foodCost = request.POST['foodCost']
+        update_species_query = "UPDATE species SET Name = '{}', FoodCost = '{}', updated_date = CURRENT_DATE WHERE ID = '{}'".format(name, foodCost, species_id)
+        cursor = connection.cursor()
+        try:
+            cursor.execute(update_species_query)
+        except IntegrityError as e:
+            print(f"Error executing raw SQL query: {e}")
+            return False
+        else:
+            connections['default'].commit()
+            return redirect('/species/view_species')
+
+    fetch_single_specie = "SELECT * FROM species WHERE ID = '{}'".format(species_id)
+
+    try:
+        with connections['default'].cursor() as cursor:
+            # execute query taking in username, password, role (default "User")
+            cursor.execute(fetch_single_specie)
+            species_fetch = dict_fetch_all(cursor)
+            if len(species_fetch) != 1:
+                return redirect("/species/view_species")
+
+    except IntegrityError as e:
+        # Handle integrity constraint violations or other database errors
+        print(f"Error executing raw SQL query: {e}")
+        return False
+    else:
+        connections['default'].commit()
+        return render(request, 'zoo/species/update_one_species.html', {
+            'species': species_fetch[0]
+        })
+
+
+def delete_species(request, speciesID):
+    delete_species_query = "DELETE FROM species WHERE ID = '{}'".format(speciesID)
+    try:
+        with connections['default'].cursor() as cursor:
+            # execute query taking in username, password, role (default "User")
+            cursor.execute(delete_species_query)
+    except IntegrityError as e:
+        # Handle integrity constraint violations or other database errors
+        print(f"Error executing raw SQL query: {e}")
+        return False
+    else:
+        # Commit the changes if the query executed successfully
+        connections['default'].commit()
+        # redirect
+        return redirect('/species/view_species')
 
 
 def asset_management(request):

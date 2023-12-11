@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}View Employees{% endblock %}
+{% block content %}
+    <h1>View Employees</h1>
+    <a href="/employees/create_employees">Create New Employee</a>
+    {% if employees|length > 0 %}
+        <table border="1">
+            <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>Start Date</th>
+                <th>Job Type</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Supervisor ID</th>
+                <th>Hourly Rate ID</th>
+                <th>Concession ID</th>
+                <th>Zoo Admission ID</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for em in employees %}
+                <tr>
+                    <td>{{ em.EmployeeID }}</td>
+                    <td>{{ em.StartDate }}</td>
+                    <td>{{ em.JobType }}</td>
+                    <td>{{ em.FirstName }}</td>
+                    <td>{{ em.LastName }}</td>
+                    <td>{{ em.SuperID }}</td>
+                    <td>{{ em.HourlyRateID }}</td>
+                    <td>{{ em.ConcessionID }}</td>
+                    <td>{{ em.ZooAdmissionID }}</td>
+                    <td>
+                        <a href={% url "update_employees" empId=em.EmployeeID %}>Update</a>
+                        | <a href={% url "delete_employees" empId=em.EmployeeID %}>Delete</a>
+                    </td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h2>No species data in db</h2>
+    {% endif %}
+{% endblock %}

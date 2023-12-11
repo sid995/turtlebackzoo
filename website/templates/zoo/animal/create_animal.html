@@ -4,7 +4,7 @@
     <h2>Create Animal</h2>
 
     <!-- Animal creation form -->
-    <form method="post" action="">
+    <form method="post" action={% url 'create_animal' %}>
         {% csrf_token %}
         <label for="status">Status:
             <input type="text" name="status" required>

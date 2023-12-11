@@ -29,6 +29,11 @@ urlpatterns = [
     path('species/update_species/<int:species_id>', views.update_species, name='update_species'),
     path('species/delete_species/<int:speciesID>', views.delete_species, name='delete_species'),
 
+    path('employees/view_employees', views.view_employees, name='view_employees'),
+    path('employees/create_employees', views.create_employees, name='create_employees'),
+    path('employees/update_employees/<int:empId>', views.update_employees, name='update_employees'),
+    path('employees/delete_employees/<int:empId>', views.delete_employees, name='delete_employees'),
+
     path('daily_zoo_activity', views.daily_zoo_activity, name='daily_zoo_activity'),
     path('management_reporting', views.management_reporting, name='management_reporting'),
     path('animal_section', views.animal_section, name='animal_section'),

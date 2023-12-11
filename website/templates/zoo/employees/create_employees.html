@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Create Employee{% endblock %}
+{% block content %}
+    <h1>Create Employee</h1>
+    <form method="post" action={% url 'create_employees' %}>
+        {% csrf_token %}
+        <label for="jobType">Job Type:
+            <select name="jobType" required>
+                <option value="Veterinarian">Veterinarian</option>
+                <option value="Animal Care Specialist">Animal Care Specialist</option>
+                <option value="Maintenance">Maintenance</option>
+                <option value="Customer Service">Customer Service</option>
+                <option value="Ticket Seller">Ticket Seller</option>
+            </select>
+        </label>
+        <br>
+
+        <label for="firstName">First Name:
+            <input type="text" name="firstName" required>
+        </label>
+        <br>
+
+        <label for="middleName">Middle Name:
+            <input type="text" name="middleName">
+        </label>
+        <br>
+
+        <label for="lastName">Last Name:
+            <input type="text" name="lastName" required>
+        </label>
+        <br>
+
+        <label for="street">Street:
+            <input type="text" name="street" required>
+        </label>
+        <br>
+
+        <label for="city">City:
+            <input type="text" name="city" required>
+        </label>
+        <br>
+
+        <label for="state">State:
+            <input type="text" name="state" required>
+        </label>
+        <br>
+
+        <label for="zip">Zip:
+            <input type="number" name="zip" pattern="[0-9]+" required>
+        </label>
+        <br>
+
+        <label for="superID">Supervisor:
+            <select name="superID">
+                <option value={{ 0 }}>None</option>
+                {% for em in employees %}
+                    <option value={{ em.EmployeeID }}>{{ em.FullName }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <br>
+
+        <label for="hourlyRateID">Hourly Rate:
+            <select name="hourlyRateID" required>
+                {% for hr in hour_rate %}
+                    <option value={{ hr.ID }}>{{ hr.HourlyRate }}</option>
+                {% endfor %}
+            </select>
+        </label><br>
+
+
+        <label for="concessionID">Concession:
+            <select name="concessionID">
+                <option value={{ 0 }}>None</option>
+                {% for con in concession %}
+                    <option value={{ con.ID }}>{{ con.Product }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <br>
+
+
+        <label for="zooAdmissionID">Zoo Admission:
+            <select name="zooAdmissionID">
+                <option value={{ 0 }}>None</option>
+                {% for za in zoo_admission %}
+                    <option value={{ za.ID }}>{{ za.ID }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <br>
+
+        <button type="submit" name="createEmployee">Create Employee</button>
+    </form>
+
+    <a href="/employees/view_employees">Back to Employees View</a>
+{% endblock %}

@@ -2,7 +2,7 @@
 {% block title %}Create Species{% endblock %}
 {% block content %}
     <h1>View Species</h1>
-    <form method="post" action="/species/create_species">
+    <form method="post" action={% url 'create_species' %}>
         {% csrf_token %}
         <label for="name">Name:
             <input type="text" name="name" required>

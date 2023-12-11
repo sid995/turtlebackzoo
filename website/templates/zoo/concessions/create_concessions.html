@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Create Concession</h2>
+    <form method="post" action="/concessions/create_concessions">
+        {% csrf_token %}
+        <label for="revenueTypeId">Revenue Type:
+            <select name="revenueTypeId" required>
+                {% for rev in revenue_type %}
+                    <option value="{{ rev.ID }}">{{ rev.Name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <br>
+
+        <label for="product">Product:
+            <input type="text" name="product" required>
+        </label>
+        <br>
+
+        <button type="submit">Create Concession</button>
+    </form>
+
+    <a href="/concessions/view_concessions">Back to Concessions</a>
+{% endblock %}

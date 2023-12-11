@@ -39,6 +39,12 @@ urlpatterns = [
     path('enclosures/delete_enclosure/<int:enId>', views.delete_enclosure, name='delete_enclosure'),
     path('enclosures/create_enclosure', views.create_enclosure, name='create_enclosure'),
 
+    path('concessions/view_concessions', views.view_concessions, name="view_concessions"),
+    path('concessions/update_concessions/<int:conId>', views.update_concessions, name="update_concessions"),
+    path('concessions/delete_concessions/<int:conId>', views.delete_concessions, name="delete_concessions"),
+    path('concessions/create_concessions', views.create_concessions, name="create_concessions"),
+    path('concessions/sales_concessions', views.sales_concessions, name="sales_concessions"),
+
     path('daily_zoo_activity', views.daily_zoo_activity, name='daily_zoo_activity'),
     path('management_reporting', views.management_reporting, name='management_reporting'),
     path('animal_section', views.animal_section, name='animal_section'),

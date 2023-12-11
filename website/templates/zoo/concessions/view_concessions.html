@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}View Concessions{% endblock %}
+{% block content %}
+    <h2>Concessions Management</h2>
+        <a href="/concessions/create_concessions">Create New Concession</a>
+    <table border="1">
+        <tr>
+            <th>Concession ID</th>
+            <th>Revenue Type</th>
+            <th>Product</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for con in concessions %}
+            <tr>
+                <td>{{ con.ID }}</td>
+                <td>{{ con.RevenueType }}</td>
+                <td>{{ con.Product }}</td>
+            <td>
+                <a href={% url "update_concessions" conId=con.ID %}>Update</a>
+                {% if request.session.role == "Admin" %}
+                    | <a href={% url "delete_concessions" conId=con.ID %}>Delete</a>
+                {% endif %}
+            </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+

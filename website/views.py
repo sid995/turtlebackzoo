@@ -539,8 +539,82 @@ def create_enclosure(request):
     cursor = connection.cursor()
     cursor.execute(fetch_building)
     r = dict_fetch_all(cursor)
-    print(r)
     return render(request, 'zoo/enclosures/create_enclosure.html', {"buildings": r})
+
+
+def view_concessions(request):
+    concessions_query = "SELECT C.ID, RT.Name AS RevenueType, C.Product FROM concession AS C JOIN revenuetype AS RT ON C.ID = RT.ID"
+    cursor = connection.cursor()
+    cursor.execute(concessions_query)
+    r = dict_fetch_all(cursor)
+
+    return render(request, 'zoo/concessions/view_concessions.html', {"concessions": r})
+
+
+def update_concessions(request, conId):
+    if request.method == "POST":
+        productName = request.POST.get('updatedProduct')
+        update_query = "UPDATE concession SET Product = '{}' WHERE ID = '{}'".format(productName, conId)
+        cursor = connection.cursor()
+        cursor.execute(update_query)
+        connections['default'].commit()
+        return redirect('/concessions/view_concessions')
+
+    concession_query = "SELECT C.ID, RT.Name AS RevenueType, C.Product FROM concession AS C JOIN revenuetype AS RT ON C.ID = RT.ID WHERE C.ID = '{}'".format(
+        conId)
+    cursor = connection.cursor()
+    cursor.execute(concession_query)
+    r = dict_fetch_all(cursor)
+
+    return render(request, 'zoo/concessions/update_concessions.html', {"concessions": r[0]})
+
+
+def delete_concessions(request, conId):
+    concession_query = "DELETE FROM concession WHERE ID = '{}'".format(conId)
+    cursor = connection.cursor()
+    cursor.execute(concession_query)
+    connections['default'].commit()
+    return redirect('/concessions/view_concessions')
+
+
+def create_concessions(request):
+    if request.method == "POST":
+        revenueId = request.POST.get('revenueTypeId')
+        productName = request.POST.get('product')
+        update_query = "INSERT INTO concession (ID, Product) VALUES ('{}', '{}')".format(revenueId, productName)
+        cursor = connection.cursor()
+        cursor.execute(update_query)
+        connections['default'].commit()
+        return redirect('/concessions/view_concessions')
+
+    fetch_revenue = "SELECT ID, Name FROM revenuetype"
+    cursor = connection.cursor()
+    cursor.execute(fetch_revenue)
+    r = dict_fetch_all(cursor)
+    return render(request, 'zoo/concessions/create_concessions.html', {"revenue_type": r})
+
+
+def sales_concessions(request):
+    if request.method == "POST":
+        concessionID = request.POST.get('concessionID')
+        concessionName = request.POST.get('concessionName')
+        daily_concession_revenue = "INSERT INTO dailyconcessionrevenue (ConcessionID, Revenue) VALUES ('{}', '{}')".format(concessionID, concessionName)
+        cursor = connection.cursor()
+        cursor.execute(daily_concession_revenue)
+        connections['default'].commit()
+        return redirect('/concessions/view_concessions')
+
+
+    daily_concession_query = "SELECT RecordID, Product, Revenue, SaleDate FROM dailyconcessionrevenue JOIN concession ON dailyconcessionrevenue.ConcessionID = concession.ID"
+
+    cursor = connection.cursor()
+    cursor.execute(daily_concession_query)
+    r = dict_fetch_all(cursor)
+
+    concession_query = "SELECT ID, Product FROM concession"
+    cursor.execute(concession_query)
+    c = dict_fetch_all(cursor)
+    return render(request, 'zoo/concessions/sales_concession.html', {"daily_concession": r, "concessions": c})
 
 
 def asset_management(request):

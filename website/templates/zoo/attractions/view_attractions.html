@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}View Attractions {% endblock %}
+{% block content %}
+    <h1>View Attractions</h1>
+    {% if view_attractions|length > 0 %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Attraction ID</th>
+                    <th>ShowsPerDay</th>
+                    <th>SeniorPrice</th>
+                    <th>AdultPrice</th>
+                    <th>ChildPrice</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for va in view_attractions %}
+                <tr>
+                    <td>{% firstof va.ID "N/A" %}</td>
+                    <td>{% firstof va.ShowsPerDay "N/A" %}</td>
+                    <td>{% firstof va.SeniorPrice "N/A" %}</td>
+                    <td>{% firstof va.AdultPrice "N/A" %}</td>
+                    <td>{% firstof va.ChildPrice "N/A" %}</td>
+                    <td>
+                        <a href=''>View</a>
+                        | <a href={% url "sview_attractions" attractions_id=va.ID %}>Update</a>
+                        | <a href={% url "delete_attractions" attractionsID=va.ID %}>Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h2>No Attractions data in db</h2>
+    {% endif %}
+{% endblock %}
+
+{#{% if athlete_list|length > 1 %}...{% endif %}#}

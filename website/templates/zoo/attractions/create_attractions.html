@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Create attractions{% endblock %}
+{% block content %}
+    <h1>View attractions</h1>
+    <form method="post" action="/attractions/create_attractions">
+        {% csrf_token %}
+      
+        <label for="ID">Show ID:
+            <input type="number" name="ID" required>
+        </label>
+        <br>
+
+        <label for="ShowsPerDay">Shows Per Day:
+            <input type="number" name="ShowsPerDay" required>
+        </label>
+        <br>
+
+        <label for="SeniorPrice">Senior Price:
+            <input type="number" name="SeniorPrice" required>
+        </label>
+        <br>
+
+        <label for="AdultPrice">Adult Price:
+            <input type="number" name="AdultPrice" required>
+        </label>
+        <br>
+
+        
+        <label for="ChildPrice">Child Price:
+            <input type="number" name="ChildPrice" required>
+        </label>
+        <br>
+
+        <button type="submit" name="createattractions">Create attractions</button>
+    </form>
+
+    <a href="/attractions/view_attractions">Back to attractions</a>
+{% endblock %}

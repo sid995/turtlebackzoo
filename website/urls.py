@@ -28,6 +28,14 @@ urlpatterns = [
     path('species/update_species/<int:species_id>', views.update_species, name='update_species'),
     path('species/delete_species/<int:speciesID>', views.delete_species, name='delete_species'),
 
+    path('zooadmission/view_zooadmission', views.view_zooadmission, name='view_zooadmission'),
+    path('zooadmission/update_zooadmission/<int:zooadmission_id>', views.update_zooadmission, name='update_zooadmission'),
+    
+    path('attractions/view_attractions', views.view_attractions, name='view_attractions'),
+    path('attractions/delete_attractions/<int:attractionsID>', views.delete_attractions, name='delete_attractions'),
+    path('attractions/create_attractions', views.create_attractions, name='create_attractions'),
+    path('attractions/sview_attractions/<int:attractions_id>', views.sview_attractions, name='sview_attractions'),
+    
     path('employees/view_employees', views.view_employees, name='view_employees'),
     path('employees/create_employees', views.create_employees, name='create_employees'),
     path('employees/update_employees/<int:empId>', views.update_employees, name='update_employees'),
@@ -49,7 +57,6 @@ urlpatterns = [
     path('revenuetypes/create_revenue_type', views.create_revenue_type, name="create_revenue_type"),
     path('revenuetypes/update_revenue_type/<int:revId>', views.update_revenue_type, name="update_revenue_type"),
     path('revenuetypes/delete_revenue_type/<int:revId>', views.delete_revenue_type, name="delete_revenue_type"),
-
     path('daily_zoo_activity', views.daily_zoo_activity, name='daily_zoo_activity'),
     path('management_reporting', views.management_reporting, name='management_reporting'),
     path('animal_section', views.animal_section, name='animal_section'),

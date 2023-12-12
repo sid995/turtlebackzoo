@@ -4,6 +4,7 @@
     <h1>View Attractions</h1>
     <a href="{% url 'create_attractions' %}">Create a new attraction</a>
     {% if view_attractions|length > 0 %}
+    <a href={% url "create_attractions" %}>Create attractions</a>
         <table border="1">
             <thead>
                 <tr>
@@ -30,6 +31,8 @@
                         {% endif %}
                     </td>
                 </tr>
+                
+
             {% endfor %}
             </tbody>
         </table>

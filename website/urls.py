@@ -36,6 +36,11 @@ urlpatterns = [
     path('attractions/create_attractions', views.create_attractions, name='create_attractions'),
     path('attractions/sview_attractions/<int:attractions_id>', views.sview_attractions, name='sview_attractions'),
     
+    path('buildings/view_buildings', views.view_buildings, name='view_buildings'),
+    path('buildings/delete_buildings/<int:buildingsID>', views.delete_buildings, name='delete_buildings'),
+    path('buildings/create_buildings', views.create_buildings, name='create_buildings'),
+    path('buildings/update_buildings/<int:buildings_id>', views.update_buildings, name='update_buildings'),
+    
     path('employees/view_employees', views.view_employees, name='view_employees'),
     path('employees/create_employees', views.create_employees, name='create_employees'),
     path('employees/update_employees/<int:empId>', views.update_employees, name='update_employees'),

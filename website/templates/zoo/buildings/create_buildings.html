@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Create buildings{% endblock %}
+{% block content %}
+    <h1>Create buildings</h1>
+    <form method="post" action="/buildings/create_buildings">
+        {% csrf_token %}
+      
+        <label for="ID">building ID:
+            <input type="number" name="ID" required>
+        </label>
+        <br>
+
+        <label for="Name">Name:
+            <input type="text" name="Name" required>
+        </label>
+        <br>
+
+        <label for="Type">Type:
+            <input type="text" name="Type" required>
+        </label>
+        <br>
+
+        <button type="submit" name="create_buildings">Create buildings</button>
+    </form>
+
+    <a href="/buildings/view_buildings">Back to attractions</a>
+{% endblock %}

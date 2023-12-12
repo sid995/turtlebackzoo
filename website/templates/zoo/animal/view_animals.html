@@ -27,7 +27,7 @@
                     <td>{% firstof animal.BuildingName "N/A" %}</td>
                     <td>
                         <a href={% url "update_animal" animalID=animal.ID %}>Update</a>
-                        {% if request.session.role == "Admin" %}
+                        {% if request.session.role == "Admin" or request.session.role == "Manager"  %}
                         | <a href={% url "delete_animal" animalID=animal.ID %}>Delete</a>
                         {% endif %}
                     </td>

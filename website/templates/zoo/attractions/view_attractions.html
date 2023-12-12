@@ -3,6 +3,7 @@
 {% block content %}
     <h1>View Attractions</h1>
     {% if view_attractions|length > 0 %}
+    <a href={% url "create_attractions" %}>Create attractions</a>
         <table border="1">
             <thead>
                 <tr>
@@ -28,6 +29,8 @@
                         | <a href={% url "delete_attractions" attractionsID=va.ID %}>Delete</a>
                     </td>
                 </tr>
+                
+
             {% endfor %}
             </tbody>
         </table>

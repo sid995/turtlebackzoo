@@ -950,3 +950,83 @@ def logout(request):
         del request.session['role']
         request.session.modified = True
     return redirect(reverse('login'))
+
+def view_buildings(request):
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM building")
+    result = dict_fetch_all(cursor)
+    return render(request, 'zoo/buildings/view_buildings.html', {'view_buildings': result})
+
+def delete_buildings(request, buildingsID):
+        delete_buildings_query = "DELETE FROM building WHERE ID = '{}'".format(buildingsID)
+        try:
+            with connections['default'].cursor() as cursor:
+              # execute query taking in username, password, role (default "User")
+                cursor.execute( delete_buildings_query)
+        except IntegrityError as e:
+                # Handle integrity constraint violations or other database errors
+            print(f"Error executing raw SQL query: {e}")
+            return False
+        else:
+             # Commit the changes if the query executed successfully
+             connections['default'].commit()
+             return redirect('/buildings/view_buildings')
+         
+def create_buildings(request):
+    if request.method == 'POST':
+        ID = request.POST['ID']
+        Name = request.POST['Name']
+        Type = request.POST['Type']
+
+        create_buildings_query = "INSERT INTO building (ID ,Name, Type) VALUES ('{}', '{}', '{}')".format(
+           ID, Name, Type)
+        try:
+            with connections['default'].cursor() as cursor:
+                cursor.execute(create_buildings_query)
+        except IntegrityError as e:
+            # Handle integrity constraint violations or other database errors
+            print(f"Error executing raw SQL query: {e}")
+            return False
+        else:
+            # Commit the changes if the query executed successfully
+            connections['default'].commit()
+            # redirect
+            return redirect('/buildings/view_buildings')
+    return render(request, 'zoo/buildings/create_buildings.html')
+
+
+def update_buildings(request, buildings_id):
+    if request.method == 'POST':
+        ID = request.POST.get('ID')
+        Name = request.POST.get('Name')
+        Type = request.POST.get('Type')
+        update_buildings_query = "UPDATE building SET ID = '{}', Name = '{}', Type = '{}'".format(ID, Name, Type, buildings_id)
+        cursor = connection.cursor()
+        try:
+            cursor.execute(update_buildings_query)
+        except IntegrityError as e:
+            print(f"Error executing raw SQL query: {e}")
+            return False
+        else:
+            connections['default'].commit()
+            return redirect('/buildings/view_buildings')
+
+    fetch_single_buildings = "SELECT * FROM building WHERE ID = '{}'".format(buildings_id)
+
+    try:
+        with connections['default'].cursor() as cursor:
+            # execute query taking in username, password, role (default "User")
+            cursor.execute(fetch_single_buildings)
+            buildings_fetch = dict_fetch_all(cursor)
+            if len(buildings_fetch) != 1:
+                return redirect("/buildings/view_buildings")
+
+    except IntegrityError as e:
+        # Handle integrity constraint violations or other database errors
+        print(f"Error executing raw SQL query: {e}")
+        return False
+    else:
+        connections['default'].commit()
+        return render(request, 'zoo/buildings/update_buildings.html', {
+            'buildings': buildings_fetch[0]
+        })

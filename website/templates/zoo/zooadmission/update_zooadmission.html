@@ -8,17 +8,17 @@
         </label>
         <br>
 
-        <label for="SeniorPrice">AdultPrice:
+        <label for="AdultPrice">AdultPrice:
             <input type="number" name="AdultPrice" value="{{ zooadmission.AdultPrice }}" required>
         </label>
         <br>
 
-        <label for="SeniorPrice">ChildPrice:
+        <label for="ChildPrice">ChildPrice:
             <input type="number" name="ChildPrice" value="{{ zooadmission.ChildPrice }}" required>
         </label>
         <br>
 
-        <button type="submit" name="updatezooadmission">Update zooadmission prices</button>
+        <button type="submit">Update zooadmission prices</button>
     </form>
 
     <a href="{% url "view_zooadmission" %}">Back to zoo admission prices</a>

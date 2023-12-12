@@ -21,7 +21,7 @@
                     <td>{% firstof za.AdultPrice "N/A" %}</td>
                     <td>{% firstof za.ChildPrice "N/A" %}</td>
                     <td>
-                        | <a href={% url "update_zooadmission" zooadmission_id=za.ID %}>Update</a>
+                       <a href={% url "update_zooadmission" zooadmission_id=za.ID %}>Update</a>
                     </td>
                 </tr>
             {% endfor %}

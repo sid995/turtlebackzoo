@@ -1,11 +1,31 @@
-<!-- zoo/templates/zoo/asset_management.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ page_title }}</title>
-</head>
-<body>
-<h1>{{ page_title }}</h1>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Select Time Period for Top Attractions Report</h2>
+    <form method="post" action="{% url 'top_attractions' %}">
+        {% csrf_token %}
+        <label for="startDate">Start Date:</label>
+        <input type="date" name="startDate" required>
+        <label for="endDate">End Date:</label>
+        <input type="date" name="endDate" required>
+        <button type="submit" name="generateTopAttractionsReport">Generate Report</button>
+    </form>
+    {% if result.length > 0 %}
+        <h2>Top 3 Attractions for the period {{ startDate }} to {{ endDate }}</h2>
+        <table>
+            <tr>
+                <th>Attraction ID</th>
+                <th>Total Revenue</th>
+            </tr>
+            {% for r in result %}
+                <tr>
+                    <td>{{ r.AnimalShowID }}</td>
+                    <td>{{ r.TotalRevenue }}</td>
+                </tr>
+            {% endfor %}
+
+        </table>
+    {% else %}
+        <div>NO data for the specific time period</div>
+    {% endif %}
+{% endblock %}

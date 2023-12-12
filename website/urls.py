@@ -40,7 +40,7 @@ urlpatterns = [
     path('buildings/delete_buildings/<int:buildingsID>', views.delete_buildings, name='delete_buildings'),
     path('buildings/create_buildings', views.create_buildings, name='create_buildings'),
     path('buildings/update_buildings/<int:buildings_id>', views.update_buildings, name='update_buildings'),
-    
+
     path('employees/view_employees', views.view_employees, name='view_employees'),
     path('employees/create_employees', views.create_employees, name='create_employees'),
     path('employees/update_employees/<int:empId>', views.update_employees, name='update_employees'),
@@ -63,17 +63,16 @@ urlpatterns = [
     path('revenuetypes/update_revenue_type/<int:revId>', views.update_revenue_type, name="update_revenue_type"),
     path('revenuetypes/delete_revenue_type/<int:revId>', views.delete_revenue_type, name="delete_revenue_type"),
 
+    path('hourly_rate', views.hourly_rate, name="hourly_rate"),
+    path('update_hourly_rate/<int:hID>', views.update_hourly_rate, name="update_hourly_rate"),
+
     path('daily_zoo_activity', views.daily_zoo_activity, name='daily_zoo_activity'),
     path('management_reporting', views.management_reporting, name='management_reporting'),
-    path('animal_section', views.animal_section, name='animal_section'),
     path('animal_population', views.animal_population, name='animal_population'),
-    path('building_section', views.building_section, name='building_section'),
     path('attractions_section', views.attractions_section, name='attractions_section'),
-    path('employee_section', views.employee_section, name='employee_section'),
     path('employee_hwp', views.employee_hwp, name='employee_hwp'),
     path('revenue_report', views.revenue_report, name='revenue_report'),
     path('attractions_activity', views.attractions_activity, name='attractions_activity'),
-    path('concessions_page', views.concessions_page, name='concessions_page'),
     path('attendance_page', views.attendance_page, name='attendance_page'),
     path('top_attractions', views.top_attractions, name='top_attractions'),
     path('best_days', views.best_days, name='best_days'),

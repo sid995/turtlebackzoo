@@ -181,6 +181,7 @@
         body {
             font: 500 14px/1.2 sans-serif;
             margin: 0;
+            padding: 20px;
             background: #fff;
             height: 100%;
             min-height: 100%;
@@ -190,15 +191,17 @@
     </style>
 </head>
 <body>
-{% block header %}
-{% endblock %}
+{% if request.session.role %}
+    <a href="{% url 'logout' %}">
+        <button>Logout</button>
+    </a>
+{% endif %}
 {% block content %}
-
 {% endblock %}
 </body>
 <script>
-    if(performance.getEntriesByType("navigation")[0].type === "back_forward") {
-       location.reload(true);
+    if (performance.getEntriesByType("navigation")[0].type === "back_forward") {
+        location.reload(true);
     }
 </script>
 {% block scripts %}

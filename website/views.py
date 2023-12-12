@@ -342,18 +342,21 @@ def delete_species(request, speciesID):
         # redirect
         return redirect('/species/view_species')
 
+
 def view_zooadmission(request):
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM zooadmission")
     result = dict_fetch_all(cursor)
     return render(request, 'zoo/zooadmission/view_zooadmission.html', {'zooadmission': result})
 
+
 def update_zooadmission(request, zooadmission_id):
     if request.method == 'POST':
         SeniorPrice = request.POST.get('SeniorPrice')
         AdultPrice = request.POST.get('AdultPrice')
         ChildPrice = request.POST.get('ChildPrice')
-        update_zooadmission_query = "UPDATE zooadmission SET SeniorPrice = '{}', AdultPrice = '{}', ChildPrice = '{}'".format(SeniorPrice, AdultPrice, ChildPrice, zooadmission_id)
+        update_zooadmission_query = "UPDATE zooadmission SET SeniorPrice = '{}', AdultPrice = '{}', ChildPrice = '{}'".format(
+            SeniorPrice, AdultPrice, ChildPrice, zooadmission_id)
         cursor = connection.cursor()
         try:
             cursor.execute(update_zooadmission_query)
@@ -384,27 +387,30 @@ def update_zooadmission(request, zooadmission_id):
             'zooadmission': zooadmission_fetch[0]
         })
 
+
 def view_attractions(request):
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM animalshow")
     result = dict_fetch_all(cursor)
     return render(request, 'zoo/attractions/view_attractions.html', {'view_attractions': result})
 
+
 def delete_attractions(request, attractionsID):
-        delete_attractions_query = "DELETE FROM animalshow WHERE ID = '{}'".format(attractionsID)
-        try:
-            with connections['default'].cursor() as cursor:
-              # execute query taking in username, password, role (default "User")
-                cursor.execute( delete_attractions_query)
-        except IntegrityError as e:
-                # Handle integrity constraint violations or other database errors
-            print(f"Error executing raw SQL query: {e}")
-            return False
-        else:
-             # Commit the changes if the query executed successfully
-             connections['default'].commit()
-             return redirect('/attractions/view_attractions')
-         
+    delete_attractions_query = "DELETE FROM animalshow WHERE ID = '{}'".format(attractionsID)
+    try:
+        with connections['default'].cursor() as cursor:
+            # execute query taking in username, password, role (default "User")
+            cursor.execute(delete_attractions_query)
+    except IntegrityError as e:
+        # Handle integrity constraint violations or other database errors
+        print(f"Error executing raw SQL query: {e}")
+        return False
+    else:
+        # Commit the changes if the query executed successfully
+        connections['default'].commit()
+        return redirect('/attractions/view_attractions')
+
+
 def create_attractions(request):
     if request.method == 'POST':
         ID = request.POST['ID']
@@ -413,7 +419,7 @@ def create_attractions(request):
         AdultPrice = request.POST['AdultPrice']
         ChildPrice = request.POST['ChildPrice']
         create_attractions_query = "INSERT INTO animalshow (ID ,ShowsPerDay, SeniorPrice, AdultPrice, ChildPrice) VALUES ('{}', '{}', '{}','{}','{}')".format(
-           ID, ShowsPerDay, SeniorPrice, AdultPrice, ChildPrice)
+            ID, ShowsPerDay, SeniorPrice, AdultPrice, ChildPrice)
         try:
             with connections['default'].cursor() as cursor:
                 cursor.execute(create_attractions_query)
@@ -428,6 +434,7 @@ def create_attractions(request):
             return redirect('/attractions/view_attractions')
     return render(request, 'zoo/attractions/create_attractions.html')
 
+
 def sview_attractions(request, attractions_id):
     if request.method == 'POST':
         ID = request.POST.get('ID')
@@ -435,7 +442,8 @@ def sview_attractions(request, attractions_id):
         SeniorPrice = request.POST.get('SeniorPrice')
         AdultPrice = request.POST.get('AdultPrice')
         ChildPrice = request.POST.get('ChildPrice')
-        update_attractions_query = "UPDATE animalshow SET ID = '{}', ShowsPerDay = '{}', SeniorPrice = '{}', AdultPrice = '{}', ChildPrice = '{}'".format( ID, ShowsPerDay,SeniorPrice, AdultPrice, ChildPrice, attractions_id)
+        update_attractions_query = "UPDATE animalshow SET ID = '{}', ShowsPerDay = '{}', SeniorPrice = '{}', AdultPrice = '{}', ChildPrice = '{}'".format(
+            ID, ShowsPerDay, SeniorPrice, AdultPrice, ChildPrice, attractions_id)
         cursor = connection.cursor()
         try:
             cursor.execute(update_attractions_query)
@@ -465,9 +473,6 @@ def sview_attractions(request, attractions_id):
         return render(request, 'zoo/attractions/sview_attractions.html', {
             'attractions': attractions_fetch[0]
         })
-
-
-
 
 
 def view_employees(request):
@@ -823,26 +828,8 @@ def management_reporting(request):
     return render(request, 'zoo/management_reporting.html', {'page_title': 'Management Reporting'})
 
 
-def animal_section(request):
-    return render(request, 'zoo/animal/animal_section.html', {'page_title': 'Animals section'})
-
-
-def building_section(request):
-    return render(request, 'zoo/buildings/building_section.html', {'page_title': 'Building section'})
-
-
 def attractions_section(request):
     return render(request, 'zoo/zoo_activity/attractions_section.html', {'page_title': 'Attractions section'})
-
-
-def employee_section(request):
-    cursor = connection.cursor()
-    cursor.execute("SELECT * FROM employee")
-    r = dict_fetch_all(cursor)
-    return render(request,
-                  'zoo/employee_section.html',
-                  {'page_title': 'Employees section', 'data': r}
-                  )
 
 
 def employee_hwp(request):
@@ -850,7 +837,16 @@ def employee_hwp(request):
 
 
 def animal_population(request):
-    return render(request, 'zoo/animal/animal_population.html', {'page_title': 'Animal Population'})
+    r = []
+    if request.method == "POST":
+        month = request.POST['selectedMonth']
+        report_query = "SELECT animal.SpeciesID, species.Name AS SpeciesName, animal.Status, SUM(species.FoodCost) AS TotalFoodCost, SUM(hourlyrate.HourlyRate * 40) AS TotalLaborCost FROM animal INNER JOIN species ON animal.SpeciesID = species.ID LEFT JOIN caresfor ON animal.SpeciesID = caresfor.SpeciesID LEFT JOIN employee ON caresfor.EmployeeID = employee.EmployeeID LEFT JOIN hourlyrate ON employee.HourlyRateID = hourlyrate.ID WHERE DATE_FORMAT(species.updated_date, '%Y-%m') = '{}' GROUP BY animal.SpeciesID, animal.Status".format(
+            month)
+        cursor = connection.cursor()
+        cursor.execute(report_query)
+        r = dict_fetch_all(cursor)
+
+    return render(request, 'zoo/animalPopulationReport/animal-population-report.html', {'report': r})
 
 
 def revenue_report(request):
@@ -861,16 +857,32 @@ def attractions_activity(request):
     return render(request, 'zoo/zoo_activity/attractions_activity.html', {'page_title': 'Attractions Activity'})
 
 
-def concessions_page(request):
-    return render(request, 'zoo/zoo_activity/concessions_page.html', {'page_title': 'Concessions Page'})
-
-
 def attendance_page(request):
     return render(request, 'zoo/zoo_activity/attendance_page.html', {'page_title': 'Attendance page'})
 
 
 def top_attractions(request):
-    return render(request, 'zoo/top_attractions.html', {'page_title': 'Top Attractions'})
+    r = []
+    startDate = None
+    endDate = None
+    if request.method == 'POST':
+        startDate = request.POST['startDate']
+        endDate = request.POST['endDate']
+
+        query = """SELECT
+                    AnimalShowID,
+                    SUM(Revenue) AS TotalRevenue
+                    FROM animalshowtickets
+                    WHERE CheckoutTime BETWEEN '{}' AND '{}'
+                    GROUP BY AnimalShowID
+                    ORDER BY TotalRevenue DESC
+                    LIMIT 3
+        """.format(startDate, endDate)
+
+        cursor = connection.cursor()
+        cursor.execute(query)
+        r = dict_fetch_all(cursor)
+    return render(request, 'zoo/top_attractions.html', {"result": r, "startDate": startDate, "endDate": endDate})
 
 
 def best_days(request):
@@ -950,6 +962,37 @@ def logout(request):
         del request.session['role']
         request.session.modified = True
     return redirect(reverse('login'))
+
+
+def hourly_rate(request):
+    rate_query = "SELECT * FROM hourlyrate"
+    cursor = connection.cursor()
+    cursor.execute(rate_query)
+    result = dict_fetch_all(cursor)
+    print(result)
+
+    return render(request, 'zoo/hourlyRate/hourly_rate.html', {"result": result})
+
+
+def update_hourly_rate(request, hID):
+    if request.method == 'POST':
+        newHourlyRate = request.POST['newHourlyRate']
+        update_query = "UPDATE hourlyrate SET HourlyRate = '{}' WHERE ID = '{}'".format(newHourlyRate, hID)
+        cursor = connection.cursor()
+        cursor.execute(update_query)
+        connections['default'].commit()
+        # redirect
+        return redirect('/hourly_rate')
+
+    hourly_query = "SELECT * FROM hourlyrate WHERE ID = '{}'".format(hID)
+    cursor = connection.cursor()
+    cursor.execute(hourly_query)
+    result = dict_fetch_all(cursor)
+
+    if len(result) == 0:
+        return redirect('/hourly_rate')
+
+    return render(request, "zoo/hourlyRate/update_hourly_rate.html", {"result": result[0], "hID": hID})
 
 def view_buildings(request):
     cursor = connection.cursor()

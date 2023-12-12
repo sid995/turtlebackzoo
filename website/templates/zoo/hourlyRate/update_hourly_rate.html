@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Update Hourly Rate</h2>
+
+    <!-- Hourly rate update form -->
+    <form method="post" action="{% url 'update_hourly_rate' hID %}">
+    {% csrf_token %}
+        <label for="newHourlyRate">New Hourly Rate:
+            <input type="text" name="newHourlyRate" value="{{ result.hourlyrate }}" required>
+        </label>
+        <br>
+        <br>
+        <button type="submit" name="updateHourlyRate">Update Hourly Rate</button>
+    </form>
+
+    <br>
+    <a href="{% url "hourly_rate" %}">Back to Hourly Rates</a>
+{% endblock %}

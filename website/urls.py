@@ -18,7 +18,6 @@ urlpatterns = [
     path('users/delete_user/<str:username>', views.delete_user, name='delete_user'),
 
     path('animals/view_animals', views.view_animals, name='view_animals'),
-    path('animals/view_animal/<int:animalID>', views.view_animal, name='view_animal'),
     path('animals/create_animal', views.create_animal, name='create_animal'),
     path('animals/update_animal/<int:animalID>', views.update_animal, name='update_animal'),
     path('animals/delete_animal/<int:animalID>', views.delete_animal, name='delete_animal'),
@@ -36,6 +35,23 @@ urlpatterns = [
     path('attractions/delete_attractions/<int:attractionsID>', views.delete_attractions, name='delete_attractions'),
     path('attractions/create_attractions', views.create_attractions, name='create_attractions'),
     path('attractions/sview_attractions/<int:attractions_id>', views.sview_attractions, name='sview_attractions'),
+    
+    path('employees/view_employees', views.view_employees, name='view_employees'),
+    path('employees/create_employees', views.create_employees, name='create_employees'),
+    path('employees/update_employees/<int:empId>', views.update_employees, name='update_employees'),
+    path('employees/delete_employees/<int:empId>', views.delete_employees, name='delete_employees'),
+
+    path('enclosures/view_enclosures', views.view_enclosures, name='view_enclosures'),
+    path('enclosures/view_enclosure/<int:enId>', views.view_enclosure, name='view_enclosure'),
+    path('enclosures/update_enclosure/<int:enId>', views.update_enclosure, name='update_enclosure'),
+    path('enclosures/delete_enclosure/<int:enId>', views.delete_enclosure, name='delete_enclosure'),
+    path('enclosures/create_enclosure', views.create_enclosure, name='create_enclosure'),
+
+    path('concessions/view_concessions', views.view_concessions, name="view_concessions"),
+    path('concessions/update_concessions/<int:conId>', views.update_concessions, name="update_concessions"),
+    path('concessions/delete_concessions/<int:conId>', views.delete_concessions, name="delete_concessions"),
+    path('concessions/create_concessions', views.create_concessions, name="create_concessions"),
+    path('concessions/sales_concessions', views.sales_concessions, name="sales_concessions"),
     
     
     path('daily_zoo_activity', views.daily_zoo_activity, name='daily_zoo_activity'),

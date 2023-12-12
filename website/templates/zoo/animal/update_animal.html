@@ -11,7 +11,7 @@
         <br>
 
         <label for="birthYear">Birth Year:
-            <input type="text" name="birthYear" required value={{ animal.BirthYear|date:"Y-m-d" }}>
+            <input type="text" name="birthYear" required value="{{ animal.BirthYear|date:"Y-m-d" }}">
         </label>
         <br>
 
@@ -27,7 +27,7 @@
         <label for="building">Building:
             <select name="building">
                 {% for bd in building %}
-                    <option value={{ bd.ID }} {% if bd.ID  == animal.BuildingID %} selected {% endif %}>{{ bd.Name }}</option>
+                    <option value="{{ bd.ID }}" {% if bd.ID  == animal.BuildingID %} selected {% endif %}>{{ bd.Name }}</option>
                 {% endfor %}
             </select>
         </label>
@@ -36,7 +36,7 @@
         <label for="enclosure">Enclosure:
             <select name="enclosure">
                 {% for en in enclosure %}
-                    <option value={{ en.ID }} {% if en.ID  == animal.EnclosureID %} selected {% endif %}>{{ en.SqFt }}
+                    <option value="{{ en.ID }}" {% if en.ID  == animal.EnclosureID %} selected {% endif %}>{{ en.SqFt }}
                         sqft
                     </option>
                 {% endfor %}

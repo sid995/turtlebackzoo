@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>View Enclosure</h2>
+
+    <p><strong>Enclosure ID: </strong>{{ enclosure.ID }}</p>
+    <p><strong>SqFt: </strong>{{ enclosure.SqFt }}</p>
+    <p><strong>Building: </strong>{{ enclosure.BuildingName }}</p>
+    <br>
+    <a href="/enclosures/view_enclosures">Go Back</a>
+{% endblock %}

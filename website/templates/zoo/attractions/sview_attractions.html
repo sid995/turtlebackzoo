@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+{{sview_attractions}} 
+    <h2>Update the Attractions </h2>
+    <form method="post" action="{% url 'sview_attractions' attractions.ID %}">
+    {% comment %} <form method="post" action="{% url 'sview_attractions' 4 %}"> {% endcomment %}
+    {% csrf_token %}
+     {% comment %} {{sview_attractions}}    {% endcomment %}
+    <label for="ID">Show ID:
+        <input type="number" name="ID" value="{{ sview_attractions.ID }}" required>
+    </label>
+    <br>
+
+    <label for="ShowsPerDay">Shows Per Day:
+        <input type="number" name="ShowsPerDay" value= "{{ sview_attractions.ShowsPerDay }}" required>
+    </label>
+    <br>
+
+    <label for="SeniorPrice">Senior Price:
+        <input type="number" name="SeniorPrice" value="{{ sview_attractions.SeniorPrice }}" required>
+    </label>
+    <br>
+
+    <label for="AdultPrice">Adult Price:
+        <input type="number" name="AdultPrice" value="{{ sview_attractions.AdultPrice }}" required>
+    </label>
+    <br>
+
+    
+    <label for="ChildPrice">Child Price:
+        <input type="number" name="ChildPrice" value="{{ sview_attractions.ChildPrice }}" required>
+    </label>
+    <br>
+
+        <button type="submit" name="sview_attractions">Update Attractions</button>
+    </form>
+
+    <a href="/attractions/view_attractions">Back to attractions</a>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Revenue Type Management</h2>
+
+    <a href="{% url 'create_revenue_type' %}">Create New Revenue Type</a>
+
+    <!-- Display a paginated list of revenue types with links to view, update, and delete -->
+    <table border="1">
+        <tr>
+            <th>Revenue Type ID</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Building Name</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for r in revenue_types %}
+            <tr>
+            <td>{{ r.ID }}</td>
+            <td>{{ r.Name }}</td>
+            <td>{{ r.Type }}</td>
+            <td>{{ r.BuildingName }}</td>
+            <td>
+                <a href="{% url "update_revenue_type" revId=r.ID %}">Update</a>
+                {% if request.session.role == "Admin" %}
+                    <a href="{% url "delete_revenue_type" revId=r.ID %}">Delete</a>
+                {% endif %}
+            </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

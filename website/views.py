@@ -12,7 +12,8 @@ allowed_revenue_types = ['Animal Show', 'Concession', 'Zoo Admission']
 
 
 def home(request):
-    print(request.session)
+    if 'username' not in request.session or 'role' not in request.session:
+        return redirect("/login")
     # check_for_auth(request)
     return render(request, 'zoo/home.html', {'page_title': 'Home'})
 
@@ -816,24 +817,12 @@ def delete_revenue_type(request, revId):
     return redirect('/revenuetypes/view_revenuetypes')
 
 
-def asset_management(request):
-    return render(request, 'zoo/asset_management.html', {'page_title': 'Asset Management'})
-
-
 def daily_zoo_activity(request):
     return render(request, 'zoo/daily_zoo_activity.html', {'page_title': 'Daily Zoo Activity'})
 
 
 def management_reporting(request):
     return render(request, 'zoo/management_reporting.html', {'page_title': 'Management Reporting'})
-
-
-def attractions_section(request):
-    return render(request, 'zoo/zoo_activity/attractions_section.html', {'page_title': 'Attractions section'})
-
-
-def employee_hwp(request):
-    return render(request, 'zoo/employee_hwp.html', {'page_title': 'Employees hourly wage section'})
 
 
 def animal_population(request):
@@ -847,18 +836,6 @@ def animal_population(request):
         r = dict_fetch_all(cursor)
 
     return render(request, 'zoo/animalPopulationReport/animal-population-report.html', {'report': r})
-
-
-def revenue_report(request):
-    return render(request, 'zoo/revenue_report.html', {'page_title': 'Revenue Report'})
-
-
-def attractions_activity(request):
-    return render(request, 'zoo/zoo_activity/attractions_activity.html', {'page_title': 'Attractions Activity'})
-
-
-def attendance_page(request):
-    return render(request, 'zoo/zoo_activity/attendance_page.html', {'page_title': 'Attendance page'})
 
 
 def top_attractions(request):
@@ -883,14 +860,6 @@ def top_attractions(request):
         cursor.execute(query)
         r = dict_fetch_all(cursor)
     return render(request, 'zoo/top_attractions.html', {"result": r, "startDate": startDate, "endDate": endDate})
-
-
-def best_days(request):
-    return render(request, 'zoo/best_days.html', {'page_title': 'Best Days'})
-
-
-def avg_revenue(request):
-    return render(request, 'zoo/avg_revenue.html', {'page_title': 'Average Revenue'})
 
 
 def dashboard(request):
@@ -994,26 +963,29 @@ def update_hourly_rate(request, hID):
 
     return render(request, "zoo/hourlyRate/update_hourly_rate.html", {"result": result[0], "hID": hID})
 
+
 def view_buildings(request):
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM building")
     result = dict_fetch_all(cursor)
     return render(request, 'zoo/buildings/view_buildings.html', {'view_buildings': result})
 
+
 def delete_buildings(request, buildingsID):
-        delete_buildings_query = "DELETE FROM building WHERE ID = '{}'".format(buildingsID)
-        try:
-            with connections['default'].cursor() as cursor:
-              # execute query taking in username, password, role (default "User")
-                cursor.execute( delete_buildings_query)
-        except IntegrityError as e:
-                # Handle integrity constraint violations or other database errors
-            print(f"Error executing raw SQL query: {e}")
-            return False
-        else:
-             # Commit the changes if the query executed successfully
-             connections['default'].commit()
-             return redirect('/buildings/view_buildings')
+    delete_buildings_query = "DELETE FROM building WHERE ID = '{}'".format(buildingsID)
+    try:
+        with connections['default'].cursor() as cursor:
+            # execute query taking in username, password, role (default "User")
+            cursor.execute(delete_buildings_query)
+    except IntegrityError as e:
+        # Handle integrity constraint violations or other database errors
+        print(f"Error executing raw SQL query: {e}")
+        return False
+    else:
+        # Commit the changes if the query executed successfully
+        connections['default'].commit()
+        return redirect('/buildings/view_buildings')
+
 
 def create_buildings(request):
     if request.method == 'POST':
@@ -1022,7 +994,7 @@ def create_buildings(request):
         Type = request.POST['Type']
 
         create_buildings_query = "INSERT INTO building (ID ,Name, Type) VALUES ('{}', '{}', '{}')".format(
-           ID, Name, Type)
+            ID, Name, Type)
         try:
             with connections['default'].cursor() as cursor:
                 cursor.execute(create_buildings_query)
@@ -1043,7 +1015,8 @@ def update_buildings(request, buildings_id):
         ID = request.POST.get('ID')
         Name = request.POST.get('Name')
         Type = request.POST.get('Type')
-        update_buildings_query = "UPDATE building SET ID = '{}', Name = '{}', Type = '{}'".format(ID, Name, Type, buildings_id)
+        update_buildings_query = "UPDATE building SET ID = '{}', Name = '{}', Type = '{}'".format(ID, Name, Type,
+                                                                                                  buildings_id)
         cursor = connection.cursor()
         try:
             cursor.execute(update_buildings_query)

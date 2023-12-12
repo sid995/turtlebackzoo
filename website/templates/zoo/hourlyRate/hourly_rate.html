@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Hourly Rates</h2>
+
+    {{ result }}
+    <table border="1">
+    <thead>
+        <td>ID</td>
+        <td>Hourly Rate</td>
+        <td>Actions</td>
+    </thead>
+        {% for r in result %}
+            <tr>
+                <td>{{ r.ID }}</td>
+                <td>{{ r.hourlyrate }}</td>
+            {% if request.session.role == "Admin" or request.session.role == "Manager" %}
+                <td>
+                    <a href={% url "update_hourly_rate" hID=r.ID %}>Update</a>
+                    {% if request.session.role == "Admin" or request.session.role == "Manager" %}
+                    | <a href={% url "delete_hourly_rate" empId=em.EmployeeID %}>Delete</a>
+                    {% endif %}
+                </td>
+             {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

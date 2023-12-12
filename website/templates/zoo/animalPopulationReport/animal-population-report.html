@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Generate Animal Population Report</h2>
+
+    <form method="post" action="">
+        {% csrf_token %}
+        <label for="selectedMonth">Select Month:
+            <input type="date" name="selectedMonth" required>
+        </label>
+        <button type="submit">Generate Report</button>
+    </form>
+    {% if report.length > 0 %}
+        <div>
+            <h2>Animal Population Report</h2>
+            <table>
+                <tr>
+                    <th>Species</th>
+                    <th>Status</th>
+                    <th>Total Food Cost</th>
+                    <th>Total Labor Cost</th>
+                </tr>
+                {% for r in report %}
+                    <tr>
+                        <td>{{ r.SpeciesName }}</td>
+                        <td>{{ r.Status }}</td>
+                        <td>{{ r.TotalFoodCost }}</td>
+                        <td>{{ r.TotalLaborCost }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% else %}
+        <div>NO data for the specific time period</div>
+    {% endif %}
+{% endblock %}

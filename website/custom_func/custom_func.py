@@ -3,11 +3,7 @@ from django.shortcuts import redirect
 
 
 def role_based_routing(role):
-    if role == 'Admin' or role == 'Manager':
-        route = "/dashboard"
-    else:
-        route = "/"
-    return route
+    return "/dashboard"
 
 
 def dict_fetch_all(cursor):

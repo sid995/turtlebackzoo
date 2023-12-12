@@ -16,8 +16,8 @@
             {% if request.session.role == "Admin" or request.session.role == "Manager" %}
                 <td>
                     <a href={% url "update_hourly_rate" hID=r.ID %}>Update</a>
-                    {% if request.session.role == "Admin" or request.session.role == "Manager" %}
-                    | <a href={% url "delete_hourly_rate" empId=em.EmployeeID %}>Delete</a>
+                    {% if request.session.role == "Admin" %}
+                    {% comment %} | <a href={% url "delete_hourly_rate" empId=em.EmployeeID %}>Delete</a> {% endcomment %}
                     {% endif %}
                 </td>
              {% endif %}

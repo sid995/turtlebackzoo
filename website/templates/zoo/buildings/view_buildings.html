@@ -20,7 +20,7 @@
                     <td>{% firstof vb.Name "N/A" %}</td>
                     <td>{% firstof vb.Type "N/A" %}</td>
                     <td>
-                        <a href={% url "update_buildings" buildings_id=va.ID %}>Update</a> 
+                        <a href={% url "update_buildings" buildings_id=vb.ID %}>Update</a> 
                          <a href={% url "delete_buildings" buildingsID=vb.ID %}>Delete</a>
                     </td>
                 </tr>

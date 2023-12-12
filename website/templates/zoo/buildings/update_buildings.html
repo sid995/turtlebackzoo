@@ -2,7 +2,7 @@
 {% block content %}
 {{sview_attractions}} 
     <h2>Update the Building </h2>
-    <form method="post" action="{% url 'update_buildings' buildings_id.ID %}">
+    <form method="post" action="{% url 'update_buildings' buildings.ID %}">
     {% comment %} <form method="post" action="{% url 'sview_attractions' 4 %}"> {% endcomment %}
     {% csrf_token %}
      {% comment %} {{sview_attractions}}    {% endcomment %}

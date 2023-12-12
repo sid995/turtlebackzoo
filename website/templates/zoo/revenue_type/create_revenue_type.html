@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h2>Create Revenue Type</h2>
+    <form method="post" action="">
+        {% csrf_token %}
+        <label for="name">Name:
+            <input type="text" name="name" required>
+        </label>
+        <br>
+
+        <label for="type">Type:
+            <select name="type" required>
+                {% for revtype in allowed_revenue_types %}
+                    <option value="{{ revtype }}">{{ revtype }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <br>
+
+        <label for="buildingId">Building:
+            <select name="buildingId" required>
+                {% for b in buildings %}
+                    <option value="{{ b.ID }}">{{ b.Name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <br>
+
+        <button type="submit">Create Revenue Type</button>
+    </form>
+
+    <a href="{% url 'view_revenuetypes' %}">Back to Revenue Types</a>
+
+{% endblock %}

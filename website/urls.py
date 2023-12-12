@@ -52,8 +52,11 @@ urlpatterns = [
     path('concessions/delete_concessions/<int:conId>', views.delete_concessions, name="delete_concessions"),
     path('concessions/create_concessions', views.create_concessions, name="create_concessions"),
     path('concessions/sales_concessions', views.sales_concessions, name="sales_concessions"),
-    
-    
+
+    path('revenuetypes/view_revenuetypes', views.view_revenuetypes, name="view_revenuetypes"),
+    path('revenuetypes/create_revenue_type', views.create_revenue_type, name="create_revenue_type"),
+    path('revenuetypes/update_revenue_type/<int:revId>', views.update_revenue_type, name="update_revenue_type"),
+    path('revenuetypes/delete_revenue_type/<int:revId>', views.delete_revenue_type, name="delete_revenue_type"),
     path('daily_zoo_activity', views.daily_zoo_activity, name='daily_zoo_activity'),
     path('management_reporting', views.management_reporting, name='management_reporting'),
     path('animal_section', views.animal_section, name='animal_section'),

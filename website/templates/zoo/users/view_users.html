@@ -14,7 +14,9 @@
                 <td>{{ user.Role }}</td>
                 <td>
                     <a href="{% url 'edit_user' username=user.Username %}">Edit</a>
+                    {% if request.session.role == "Admin" %}
                     | <a href="{% url 'delete_user' username=user.Username %}">Delete</a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

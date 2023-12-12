@@ -8,6 +8,8 @@ from django.urls import reverse
 
 from website.custom_func.custom_func import role_based_routing, dict_fetch_all
 
+allowed_revenue_types = ['Animal Show', 'Concession', 'Zoo Admission']
+
 
 def home(request):
     print(request.session)
@@ -725,12 +727,12 @@ def sales_concessions(request):
     if request.method == "POST":
         concessionID = request.POST.get('concessionID')
         concessionName = request.POST.get('concessionName')
-        daily_concession_revenue = "INSERT INTO dailyconcessionrevenue (ConcessionID, Revenue) VALUES ('{}', '{}')".format(concessionID, concessionName)
+        daily_concession_revenue = "INSERT INTO dailyconcessionrevenue (ConcessionID, Revenue) VALUES ('{}', '{}')".format(
+            concessionID, concessionName)
         cursor = connection.cursor()
         cursor.execute(daily_concession_revenue)
         connections['default'].commit()
         return redirect('/concessions/view_concessions')
-
 
     daily_concession_query = "SELECT RecordID, Product, Revenue, SaleDate FROM dailyconcessionrevenue JOIN concession ON dailyconcessionrevenue.ConcessionID = concession.ID"
 
@@ -742,6 +744,71 @@ def sales_concessions(request):
     cursor.execute(concession_query)
     c = dict_fetch_all(cursor)
     return render(request, 'zoo/concessions/sales_concession.html', {"daily_concession": r, "concessions": c})
+
+
+def view_revenuetypes(request):
+    revenue_query = "SELECT revenuetype.ID, revenuetype.Name, revenuetype.Type, building.Name AS BuildingName FROM revenuetype LEFT JOIN building ON revenuetype.BuildingID = building.ID"
+    cursor = connection.cursor()
+    cursor.execute(revenue_query)
+    r = dict_fetch_all(cursor)
+
+    return render(request, 'zoo/revenue_type/view_revenue_types.html', {"revenue_types": r})
+
+
+def create_revenue_type(request):
+    if request.method == 'POST':
+        productName = request.POST.get('name')
+        productType = request.POST.get('type')
+        buildingId = request.POST.get('buildingId')
+
+        revenue_create_query = "INSERT INTO revenuetype (Name, Type, BuildingID) VALUES ('{}', '{}', '{}')".format(
+            productName, productType, buildingId)
+        cursor = connection.cursor()
+        cursor.execute(revenue_create_query)
+        connections['default'].commit()
+        return redirect('/revenuetypes/view_revenuetypes')
+
+    building_query = "SELECT ID, Name FROM building"
+    cursor = connection.cursor()
+    cursor.execute(building_query)
+    r = dict_fetch_all(cursor)
+
+    return render(request, 'zoo/revenue_type/create_revenue_type.html',
+                  {"buildings": r, "allowed_revenue_types": allowed_revenue_types})
+
+
+def update_revenue_type(request, revId):
+    if request.method == 'POST':
+        productName = request.POST.get('name')
+        productType = request.POST.get('type')
+        buildingId = request.POST.get('buildingId')
+
+        update_query = "UPDATE revenuetype SET Name = '{}', Type = '{}', BuildingID = '{}' WHERE ID = '{}'".format(
+            productName, productType, buildingId, revId)
+        cursor = connection.cursor()
+        cursor.execute(update_query)
+        connections['default'].commit()
+        return redirect('/revenuetypes/view_revenuetypes')
+
+    revenue_query = "SELECT * FROM revenuetype WHERE ID = '{}'".format(revId)
+    building_query = "SELECT ID, Name FROM building"
+
+    cursor = connection.cursor()
+    cursor.execute(revenue_query)
+    r = dict_fetch_all(cursor)
+    cursor.execute(building_query)
+    b = dict_fetch_all(cursor)
+    return render(request, 'zoo/revenue_type/update_revenue_file.html',
+                  {"revenueType": r[0], "allowed_revenue_types": allowed_revenue_types, "buildings": b})
+
+
+def delete_revenue_type(request, revId):
+    delete_query = "DELETE FROM revenuetype WHERE ID = '{}'".format(revId)
+    cursor = connection.cursor()
+    cursor.execute(delete_query)
+    connections['default'].commit()
+    # redirect
+    return redirect('/revenuetypes/view_revenuetypes')
 
 
 def asset_management(request):
@@ -859,11 +926,11 @@ def register(request):
             return render(request, 'zoo/authentication/register.html',
                           {'page_title': 'Signup', 'error': 'Passwords do not match'})
         else:
-            userinsertquery = "INSERT INTO users (Username, Password, Role) VALUES (%s, %s, %s)"
+            user_insert_query = "INSERT INTO users (Username, Password, Role) VALUES (%s, %s, %s)"
             try:
                 with connections['default'].cursor() as cursor:
                     # execute query taking in username, password, role (default "User")
-                    cursor.execute(userinsertquery, [username, password, "User"])
+                    cursor.execute(user_insert_query, [username, password, "User"])
             except IntegrityError as e:
                 # Handle integrity constraint violations or other database errors
                 print(f"Error executing raw SQL query: {e}")

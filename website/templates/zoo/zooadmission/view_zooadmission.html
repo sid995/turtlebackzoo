@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}View zoo admissions{% endblock %}
+{% block content %}
+    <h1>View zoo admissions</h1>
+    {% if zooadmission|length > 0 %}
+        <table border="1">
+            <thead>
+            <tr>
+                <th>zooadmission ID</th>
+                <th>SeniorPrice</th>
+                <th>AdultPrice</th>
+                <th>ChildPrice</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for za in zooadmission %}
+                <tr>
+                    <td>{% firstof za.ID "N/A" %}</td>
+                    <td>{% firstof za.SeniorPrice "N/A" %}</td>
+                    <td>{% firstof za.AdultPrice "N/A" %}</td>
+                    <td>{% firstof za.ChildPrice "N/A" %}</td>
+                    <td>
+                        | <a href={% url "update_zooadmission" zooadmission_id=za.ID %}>Update</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h2>No zoo admission data in db</h2>
+    {% endif %}
+{% endblock %}
+
+{#{% if athlete_list|length > 1 %}...{% endif %}#}

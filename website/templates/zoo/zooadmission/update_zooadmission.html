@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Update the prices</h2>
+    <form method="post" action="{% url 'update_zooadmission' zooadmission.ID %}">
+    {% csrf_token %}
+        <label for="SeniorPrice">SeniorPrice:
+            <input type="number" name="SeniorPrice" value="{{ zooadmission.SeniorPrice }}" required>
+        </label>
+        <br>
+
+        <label for="SeniorPrice">AdultPrice:
+            <input type="number" name="AdultPrice" value="{{ zooadmission.AdultPrice }}" required>
+        </label>
+        <br>
+
+        <label for="SeniorPrice">ChildPrice:
+            <input type="number" name="ChildPrice" value="{{ zooadmission.ChildPrice }}" required>
+        </label>
+        <br>
+
+        <button type="submit" name="updatezooadmission">Update zooadmission prices</button>
+    </form>
+
+    <a href="{% url "view_zooadmission" %}">Back to zoo admission prices</a>
+{% endblock %}
